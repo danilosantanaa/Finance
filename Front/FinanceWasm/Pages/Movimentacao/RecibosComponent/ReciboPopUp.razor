@@ -1,0 +1,79 @@
+﻿@inject BancoService BancoService
+
+@if(Recibo is null) {
+    <SpinnerRippleSVG />
+} else {
+    <Form Model="Recibo" OnValidSubmit="Save" OnInvalidSubmit="StateHasChanged" Context="context">
+        <DataAnnotationsValidator />
+
+        <SectionForm IsLoaded="IsLoaded()" class="border-0 shadow-none">
+
+            <FormGroup class="row g-4">
+                <div class="col-md-4">
+                    <SelectCustom  
+                        @bind-Value="Recibo.BancoId" 
+                        Validation="() => Recibo.BancoId"
+                        class="form-select"
+                    >
+                        <option value="0">-- SELECIONE --</option>
+                        @foreach (var banco in Bancos) {
+                            <option value="@banco.Id">@banco.Nome</option>
+                        }
+                    </SelectCustom>
+                </div>
+
+                <div class="col-md-2">
+                    <InputNumberCustom 
+                        type="number"
+                        step="0.01"
+                        @bind-Value="Recibo.Valor"
+                        Validation="() => Recibo.Valor"
+                        class="form-control"/>
+                </div>
+
+                <div class="col-md-2">
+                    <InputNumberCustom 
+                        type="number"
+                        step="0.01"
+                        @bind-Value="Recibo.Desconto"
+                        Validation="() => Recibo.Desconto"
+                        class="form-control"/>
+                </div>
+
+                    <div class="col-md-2">
+                        <InputNumberCustom 
+                            type="number"
+                            step="0.01"
+                            @bind-Value="Recibo.Acrescimo"
+                            Validation="() => Recibo.Acrescimo"
+                            class="form-control" />
+                    </div>
+            </FormGroup>
+        </SectionForm>
+
+        <ButtonForm IsNew="Recibo.Id.IsNew()" DisabledSubmitButton="false" />
+    </Form>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public Recibo Recibo { get; set; }
+
+    [Parameter, EditorRequired]
+    public EventCallback<Recibo> Callback { get; set; }
+
+    List<Banco> Bancos { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Bancos = await BancoService.GetAll();
+    }
+
+    async Task Save()
+    {
+        await Callback.InvokeAsync(Recibo);
+    }
+
+    bool IsLoaded() =>
+        Bancos is not null;
+}

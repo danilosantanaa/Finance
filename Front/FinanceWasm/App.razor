@@ -1,0 +1,36 @@
+﻿
+@inject AuthProvider authProvider
+@inject ILocalStorageService localStorage
+@inject NavigationManager navigation
+
+@inject IJSRuntime IJSRuntime
+
+<CascadingAuthenticationState>
+    <Router AppAssembly="@typeof(App).Assembly">
+        <Found Context="routeData">
+            <AuthorizeRouteView RouteData="@routeData" DefaultLayout="@typeof(Layout)" />
+            <FocusOnNavigate RouteData="@routeData" Selector="h1" />
+        </Found>
+        <NotFound>
+            <PageTitle>Not found</PageTitle>
+
+            <LayoutView Layout="@typeof(Layout)">
+                <p role="alert">Desculpe, não foi encontrado nada :(</p>
+            </LayoutView>
+        
+        </NotFound>
+    </Router>
+</CascadingAuthenticationState>
+
+@code {
+    protected override async Task OnInitializedAsync()
+    {
+        await IJSRuntime.InvokeVoidAsync("bindTheme");
+
+        var authState = await authProvider.GetAuthenticationStateAsync();
+
+        if(authState.User == null || !authState.User.Identity.IsAuthenticated) {
+            navigation.NavigateTo("/login");
+        }
+    }
+}

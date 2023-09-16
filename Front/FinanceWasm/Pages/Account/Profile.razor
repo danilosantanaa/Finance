@@ -1,0 +1,86 @@
+﻿@page "/account/profile"
+
+@inject AccountService AccountService
+
+<PageUpsert Model="Account" Title="Editar Conta">
+    <div class="profile-content">
+        <div class="photo-profile male">
+            <div class="edit-controls">
+                <button class="edit" title="Editar foto de perfil">
+                    <i class="fa-solid fa-pen"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <Form Model="Account" class="mt-5">
+        <DataAnnotationsValidator />
+
+        <SectionForm>
+            <SectionTitle Title="Dados" />
+            <FormGroup class="row g-2">
+                <div class="col-md-4">
+                    <InputTextCustom 
+                        @bind-Value="Account.UserName"
+                        Validation="() => Account.UserName"
+                        class="form-control"
+                        disabled="@true" />
+                </div>
+
+                <div class="col-md-4">
+                    <InputTextCustom 
+                        @bind-Value="Account.PrimeiroNome"
+                        Validation="() => Account.PrimeiroNome"
+                        class="form-control"
+                        />
+                </div>
+
+                <div class="col-md-4">
+                    <InputTextCustom 
+                        @bind-Value="Account.UltimoNome"
+                        Validation="() => Account.UltimoNome"
+                        class="form-control"
+                        />
+                </div>
+
+                <div class="col-md-2">
+                    <InputTextCustom 
+                        @bind-Value="Account.Password"
+                        Validation="() => Account.Password"
+                        class="form-control"
+                        type="password"
+                        disabled="@false" />
+                </div>
+
+                <div class="col-md-2">
+                    <InputTextCustom 
+                        @bind-Value="Account.ConfirmPassword"
+                        Validation="() => Account.ConfirmPassword"
+                        type="password"
+                        class="form-control" />
+                </div>
+
+                <div class="col-md-2">
+                    <InputTextCustom 
+                        @bind-Value="Account.SenhaAntiga"
+                        Validation="() => Account.SenhaAntiga"
+                        type="password"
+                        class="form-control" />
+                </div>
+
+            </FormGroup>
+
+        </SectionForm>
+
+        <ButtonForm IsNew="false" />
+    </Form>
+</PageUpsert>
+
+@code {
+    Account Account;
+
+    protected override async Task OnInitializedAsync()
+    {
+        Account = await AccountService.GetProfile();
+    }
+}

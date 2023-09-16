@@ -1,0 +1,16 @@
+﻿@inherits EditForm
+
+@{
+    base.BuildRenderTree(__builder);
+}
+
+@code {
+
+    protected override void OnAfterRender(bool firstRender)
+    {
+        if(firstRender) {
+            base.EditContext.SetFieldCssClassProvider(new FieldCssClassProviderCustom());
+            base.EditContext.IsModified();
+        }
+    }
+}

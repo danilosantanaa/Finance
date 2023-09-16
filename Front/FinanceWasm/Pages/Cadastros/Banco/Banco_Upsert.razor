@@ -1,0 +1,80 @@
+@page "/banco/new"
+@page "/banco/edit/{id:int}"
+@inject BancoService BancoService
+@inject SweetAlert SweetAlert
+@inject NavigationManager NavigationManager
+
+
+<PageUpsert Title="Banco" Model="Banco" LinkPageIndex="./banco" @ref="PageUpsert">
+
+    <Form Model="Banco" OnValidSubmit="Save" OnInvalidSubmit="StateHasChanged" Context="context">
+        <DataAnnotationsValidator />
+
+        <SectionForm>
+            <SectionTitle Title="Dados"></SectionTitle>
+
+            <div class="col-md-4">
+                <InputTextCustom @bind-Value="Banco.Nome" Validation="() => Banco.Nome" class="form-control mb-2" />
+            </div>
+
+            <InputSwitch Label="@Banco.Status.EnabledOrDisabled()" @bind-Value="Banco.Status"/>
+
+        </SectionForm>
+        
+        <ButtonForm IsNew="Id.IsNew()" DisabledSubmitButton="false" URL_Create_New="./banco/new" Reload="LoadBanco"/>
+    </Form>
+
+</PageUpsert>
+  
+@code {
+    [Parameter]
+    public int Id {get; set; }
+
+    public Banco Banco {get; set;}
+    PageUpsert<Banco> PageUpsert;
+
+    protected async override Task OnInitializedAsync()
+    {
+        await LoadBanco();
+    }
+
+    public async Task LoadBanco(bool is_reload_new = false)
+    {
+        Banco = Id.IsNew() || is_reload_new ? new() : await BancoService.GetById(Id);
+
+        PageUpsert?.ChangeStatusColor(Banco.Status);
+        if (Id.IsNew() || is_reload_new)
+        {
+            PageUpsert?.HiddenStatusColor();
+        }
+
+        StateHasChanged();
+    }
+
+    public async Task Save() {
+        try {
+            var result = Id.IsNew() ?
+                await BancoService.Post(Banco) :
+                await BancoService.Put(Banco, Id);
+
+            if(!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
+
+            Id = !Id.IsNew() ? Id : result.Content.GetItem<Banco>().Id;
+
+            await SweetAlert.ToastAsync(SweetAlertType.Success, Id.IsNew() ? "Registro salvo com sucesso!" : "Registro atualizado com sucesso!");
+
+            NavigationManager.NavigateTo($"./banco/edit/{Id}");
+
+            await LoadBanco();
+
+        } catch (Exception e) {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, "Erro: " + e.Message);
+        }
+    }
+
+    #region STATUS COLOR
+    bool statusColor;
+    public bool StatusColor => Banco.Status;
+    #endregion
+}
+

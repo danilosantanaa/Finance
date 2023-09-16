@@ -1,0 +1,18 @@
+﻿<section @attributes="AdditionalAttribute">
+    @if(!IsLoaded) {
+        <SpinnerRippleSVG />
+    } else {
+        @ChildContent
+    }
+</section>
+
+@code {
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttribute { get; set; }
+
+    [Parameter]
+    public bool IsLoaded { get; set; } = true;
+}

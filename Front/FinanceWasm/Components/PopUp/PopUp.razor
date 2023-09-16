@@ -1,0 +1,56 @@
+﻿@if (IsOpen)
+{
+    <div class="container-popup">
+        <div class="popup @GetCssSizeClass()">
+            <div class="header">
+                <h2>@Title</h2>
+                <button @onclick="Close"><i class="fa-solid fa-xmark"></i></button>
+            </div>
+            <div class="body">
+                @ChildContent
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired] public string Title { get; set; }
+    [Parameter, EditorRequired] public RenderFragment ChildContent { get; set; }
+    [Parameter] public PopUpType Type { get; set; }
+    bool IsOpen;
+
+    protected override void OnInitialized()
+    {
+        Type = PopUpType.Medium_Sized;
+    }
+
+    #region HANDLER
+    public void Open()
+    {
+        IsOpen = true;
+        StateHasChanged();
+    }
+
+    public void Close()
+    {
+        IsOpen = false;
+        StateHasChanged();
+    }
+
+    public void Toggle()
+    {
+        IsOpen = !IsOpen;
+        StateHasChanged();
+    }
+    #endregion
+
+    #region VALIDATIONS
+    string GetCssSizeClass() => Type switch
+    {
+        PopUpType.Smaller => "smaller",
+        PopUpType.Medium_Sized => "medium-sized",
+        PopUpType.Largest => "largest",
+        _ => string.Empty
+    };
+    #endregion
+}

@@ -1,0 +1,10 @@
+﻿<div class="form-account-container">
+    <div class="form-account">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+}

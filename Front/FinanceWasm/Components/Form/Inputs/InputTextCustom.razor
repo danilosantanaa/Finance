@@ -1,0 +1,34 @@
+﻿@using System.Linq.Expressions
+@typeparam T
+
+@inherits InputText
+
+<div>
+    <label for="" class="form-label label">@FieldIdentifier.GetDisplayName() <span class="required">@GetFieldRequired()</span></label>
+    @{
+        base.BuildRenderTree(__builder);
+    }
+
+    @if (Validation is not null)
+    {
+        <ValidationMessage For="Validation"/>
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public Expression<Func<T>> Validation { get; set; } = null;
+
+    [Parameter]
+    public bool HiddenRequired { get; set; }
+
+    #region VALIDAÇÕES
+    string GetFieldRequired()
+    {
+        return FieldIdentifier.IsRequired() && !HiddenRequired || AdditionalAttributes.ContainsKey("required") ? "*" : string.Empty;
+    }
+    #endregion
+}

@@ -1,0 +1,22 @@
+﻿div.layout {
+    display: flex;
+    width: 100%;
+    height: 100vh;
+    position: relative;
+}
+
+main {
+    width: 100%;
+}
+
+main > article {
+    height: 94%;
+    overflow: auto;
+    padding: 0px;
+}
+
+::deep button.nav {
+    background-color: transparent;
+    color: var(--text-surface-color);
+    border: none;
+}

@@ -1,0 +1,105 @@
+﻿@page "/transacionador/new"
+@page "/transacionador/edit/{id:int}"
+
+@inject TransacionadorService TransacionadorService
+@inject CategoriaService CategoriaService
+
+@inject SweetAlert SweetAlert
+@inject NavigationManager NavigationManager
+
+<PageUpsert Title="Transacionador" Model="Transacionador" LinkPageIndex="./transacionador" @ref="PageUpsert">
+    <Form Model="Transacionador" OnValidSubmit="Save" OnInvalidSubmit="StateHasChanged" Context="context">
+        <DataAnnotationsValidator />
+
+        <SectionForm IsLoaded="IsAllDepencesLoaded()">
+            <SectionTitle Title="Dados"></SectionTitle>
+
+            <FormGroup class="row g-3">
+                <div class="col-md-5">
+                    <InputTextCustom @bind-Value="Transacionador.Nome" Validation="() => Transacionador.Nome" class="form-control" />
+                </div>
+
+                <div class="col-md-4">
+                    <InputTextCustom  @bind-Value="Transacionador.Email" Validation="() => Transacionador.Email" class="form-control" />
+                </div>
+
+                <div class="col-md-3">
+                    <InputTextCustom @bind-Value="Transacionador.Telefone" Validation="() => Transacionador.Telefone" class="form-control" />
+                </div>
+
+                <div class="col-md-5">
+                    <SelectCustom @bind-Value="Transacionador.CategoriaId" Validation="() => Transacionador.CategoriaId" class="form-select">
+                        <option value="0">-- SELECIONE --</option>
+
+                       @foreach(var item in Categorias) {
+                            <option value="@item.Id">@item.Descricao</option>
+                      }
+                    </SelectCustom>
+                </div>
+
+                <div>
+                    <InputSwitch Label="@Transacionador.Status.EnabledOrDisabled()" @bind-Value="Transacionador.Status" />
+                </div>
+            </FormGroup>
+        </SectionForm>
+
+        <ButtonForm IsNew="Id.IsNew()" DisabledSubmitButton="false" URL_Create_New="./transacionador/new" Reload="LoadTransacionador" />
+    </Form>
+</PageUpsert>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Transacionador Transacionador { get; set; }
+    PageUpsert<Transacionador> PageUpsert;
+    List<Categoria> Categorias;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadTransacionador();
+    }
+
+    public async Task LoadTransacionador(bool is_reload_new = false)
+    {
+        Transacionador = Id.IsNew() || is_reload_new ? new() : await TransacionadorService.GetById(Id);
+
+        Categorias = await CategoriaService.GetAll();
+
+        PageUpsert?.ChangeStatusColor(Transacionador.Status);
+        if (Id.IsNew() || is_reload_new) {
+            PageUpsert?.HiddenStatusColor();
+        }
+        StateHasChanged();
+
+    }
+
+    public async Task Save()
+    {
+        try {
+            var result = Id.IsNew() ?
+                await TransacionadorService.Post(Transacionador) :
+                await TransacionadorService.Put(Transacionador, Id);
+
+            if (!result.IsSuccessStatusCode) throw new Exception(result.ReasonPhrase);
+
+            Id = !Id.IsNew() ? Id : result.Content.GetItem<Transacionador>().Id;
+
+            await SweetAlert.ToastAsync(SweetAlertType.Success, Id.IsNew() ? "Registro salvo com sucesso!" : "Registro atualizado com sucesso!");
+
+            NavigationManager.NavigateTo($"transacionador/edit/{Id}");
+
+            await LoadTransacionador();
+
+        } catch( Exception e) {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, "Erro: " + e.Message);
+        }
+
+        StateHasChanged();
+    }
+
+    #region VALIDATIONS
+    bool IsAllDepencesLoaded() =>
+        Categorias is not null;
+    #endregion
+}

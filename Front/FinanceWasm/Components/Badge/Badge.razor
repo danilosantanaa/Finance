@@ -1,0 +1,35 @@
+﻿<span title="@Label" @onclick:preventDefault @onclick:stopPropagation @attributes="AdditionalAttribute" data-toggle="tooltip" data-placement="top">
+    @Label
+</span>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public BadgeEnum BadgeEnum { get; set; } = BadgeEnum.Light;
+
+    [Parameter]
+    public bool? StatusBadge { get; set; } = null;
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttribute { get; set; } = new();
+
+    protected override void OnInitialized()
+    {
+      
+        if (StatusBadge is null && string.IsNullOrEmpty(Label))
+            throw new Exception("O Label precisa ser preenchido");
+
+        BadgeEnum = StatusBadge is null ? 
+            BadgeEnum : StatusBadge.Value ? 
+            BadgeEnum.Success : BadgeEnum.Danger;
+
+        Label = StatusBadge is null ?
+            Label : StatusBadge.Value ?
+            "Ativo" : "Inativo";
+
+        AdditionalAttribute["class"] =
+            $"d-inline-block badge {BadgeEnum.ToString().ToLower()} {(AdditionalAttribute.ContainsKey("class") ? AdditionalAttribute["class"] : string.Empty)}";
+    }
+}

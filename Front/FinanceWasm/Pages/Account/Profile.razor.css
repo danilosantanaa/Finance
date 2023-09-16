@@ -1,0 +1,50 @@
+﻿.profile-content {
+    display: flex;
+    justify-content: center;
+}
+
+.photo-profile {
+    display: flex;
+    width: 300px;
+    height: 300px;
+    border: 4px solid var(--border-color);
+    border-radius: 50%;
+    justify-items: center;
+    align-items: flex-end;
+}
+
+.photo-profile.male {
+    background: url('./imagens/profile-male.png') no-repeat;
+    background-size: 100% 100%;
+}
+
+.photo-profile.fame {
+    background: url('./imagens/profile-fame.png') no-repeat;
+    background-size: 100% 100%;
+}
+
+.edit-controls {
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,.0);
+    display: flex;
+    justify-content: center;
+    align-items: flex-end;
+    border-end-end-radius: 50%;
+    border-end-start-radius: 50%;
+    overflow: hidden;
+    opacity: 0;
+}
+
+.edit-controls:hover {
+    opacity: 1;
+}
+
+.edit-controls .edit {
+    border: none;
+    height: 50%;
+    width: 100%;
+    color: var(--text-surface-color);
+    background: var(--surface-color);
+    font-size: 2em;
+}

@@ -1,0 +1,53 @@
+﻿.options-content,
+.options {
+    display: flex;
+    align-items: center;
+}
+
+.options-content {
+    gap: 20px;
+    padding-right: 30px;
+    position: relative;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none; 
+    -khtml-user-select: none; 
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.options button {
+    padding: 15px;
+    border-radius: 100%;
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-surface-color);
+    background-color: transparent;
+    border: none;
+    font-size: 1.2em;
+}
+
+.options button:hover {
+    background-color: var(--surface-color-hover);
+}
+
+.profile {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 30px;
+    height: 30px;
+    background-color: var(--surface-color-hover);
+    border-radius: 50%;
+    padding: 10px;
+    color: var(--text-surface-color);
+    cursor: pointer;
+    transition: 600ms all ease-in;
+}
+
+.profile:active {
+    border: 2px solid var(--surface-color-active);
+}

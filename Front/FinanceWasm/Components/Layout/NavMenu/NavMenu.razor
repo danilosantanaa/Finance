@@ -1,0 +1,69 @@
+﻿@if (!IsHidden)
+{
+    <div class="menu" @onclick="CloseMenu" @onclick:stopPropagation @onclick:preventDefault>
+        <div class="menu-content" @onclick:stopPropagation>
+            <Logo EventCallback="CloseMenu" />
+
+            <nav>
+                <MenuGroup>
+                    <div>
+                        <NavLink class="nav-link" href="" Match="NavLinkMatch.All" @onclick="CloseMenu">
+                            <i class="fa-solid fa-chart-line"></i> Dashboard
+                        </NavLink>
+                    </div>
+                </MenuGroup>
+
+                <MenuGroup Label="Cadastros">
+                    <div>
+                        <NavLink class="nav-link" href="banco" @onclick="CloseMenu">
+                            <i class="fa-solid fa-building-columns"></i> Bancos
+                        </NavLink>
+                    </div>
+
+                    <div>
+                        <NavLink class="nav-link" href="categoria" @onclick="CloseMenu">
+                            <i class="fa-solid fa-people-group"></i> Categorias
+                        </NavLink>
+                    </div>
+
+                    <div>
+                        <NavLink class="nav-link" href="transacionador" @onclick="CloseMenu">
+                            <i class="fa-solid fa-person-circle-plus"></i> Transacionadores
+                        </NavLink>
+                    </div>
+
+                </MenuGroup>
+
+                <MenuGroup Label="Movimentações">
+                    <div>
+                        <NavLink class="nav-link" href="cobranca" @onclick="CloseMenu">
+                            <i class="fa-solid fa-file-invoice-dollar"></i> Cobranças
+                        </NavLink>
+                    </div>
+                </MenuGroup>
+            </nav>
+        </div>
+    </div>
+}
+
+@code {
+    bool IsHidden;
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        CloseMenu();
+    }
+
+    public void OpenMenu()
+    {
+        IsHidden = false;
+        StateHasChanged();
+    }
+
+    public void CloseMenu()
+    {
+        IsHidden = true;
+        StateHasChanged();
+    }
+}

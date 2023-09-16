@@ -1,0 +1,31 @@
+﻿@inherits LayoutComponentBase
+
+<AuthorizeView>
+    <div class="layout">
+        <NavMenu @ref="NavMenu" />
+
+        <main>
+            <TopMenu OpenMenu="OpenMenu" />
+
+            <article>
+                @Body
+            </article>
+        </main>
+    </div>
+</AuthorizeView>
+
+@code {
+    NavMenu.NavMenu NavMenu;
+
+    void OpenMenu()
+    {
+        NavMenu.OpenMenu();
+        Console.WriteLine("Open...");
+    }
+
+    void CloseMenu()
+    {
+        NavMenu.CloseMenu();
+        Console.WriteLine("Close...");
+    }
+}

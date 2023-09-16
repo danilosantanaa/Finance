@@ -1,0 +1,14 @@
+﻿@inherits InputCheckbox
+
+<div>
+    <label class="form-label label me-2">@Label</label>
+
+    @{
+        base.BuildRenderTree(__builder);
+    }
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+}

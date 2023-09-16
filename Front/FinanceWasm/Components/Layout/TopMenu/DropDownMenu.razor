@@ -1,0 +1,77 @@
+﻿@if (isVisibled)
+{
+    <div class="drop-down-content @right_position_name_class.Replace(".", "")">
+        <div class="header">
+
+            @if(PrevisousDropDownCalled.HasDelegate) {
+                <button @onclick="PrevisousDownDownCall">
+                    <i class="fa-solid fa-arrow-left"></i>
+                </button>
+            }
+
+            <h2>@Header</h2>
+        </div>
+        <div class="body">
+            @ChildContent
+        </div>
+    </div>
+}
+
+@if(RightPosition is not null) {
+    <style>
+        @right_position_name_class {
+            right: @($"{RightPosition}px");
+        }
+
+        @@media screen and (max-width: 408px) {
+            @right_position_name_class {
+                right: 0px;
+            }
+        }
+    </style>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public string Header { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback PrevisousDropDownCalled { get; set; }
+
+    [Parameter]
+    public double? RightPosition { get; set; } = null;
+
+    bool isVisibled = false;
+    string right_position_name_class = $".right_position_name_{Guid.NewGuid()}";
+
+    public void TurnVisibility()
+    {
+        if(isVisibled) {
+            TurnOff();
+        } else {
+            TurnOn();
+        }
+    }
+
+    async Task PrevisousDownDownCall()
+    {
+        await PrevisousDropDownCalled.InvokeAsync();
+    }
+
+    public void TurnOn()
+    {
+        isVisibled = true;
+        StateHasChanged();
+    }
+
+    public void TurnOff()
+    {
+        isVisibled = false;
+        StateHasChanged();
+    }
+
+    public bool IsVisible() => isVisibled;
+}

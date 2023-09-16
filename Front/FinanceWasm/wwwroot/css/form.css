@@ -1,0 +1,48 @@
+﻿form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+span.required {
+    color: red;
+    font-weight: bolder;
+    font-size: 1.3em;
+}
+
+label.label {
+    margin-bottom: 0px;
+}
+
+form div input.form-control,
+form div select.form-select,
+form div input.form-control:focus {
+    background: var(--background-color);
+    background-repeat: no-repeat;
+    border: 1px solid var(--border-color);
+    color: var(--text-surface-color);
+}
+
+form div input.form-control:disabled,
+form div select.form-select:disabled {
+    background-color: transparent;
+    color: #808080;
+}
+
+[light] form div input.form-control:disabled,
+[light] form div select.form-select:disabled {
+    color: #cecece;
+    border: 1px solid #cecece;
+}
+
+input :not(input[type="checkbox"]) {
+    border: 1px solid rgba(0,0,0,.5);
+    padding: 7px 10px;
+}
+
+/*THEME LIGHT*/
+[light] form div input.form-control,
+[light] form div select.form-select {
+    background-color: transparent;
+}
+

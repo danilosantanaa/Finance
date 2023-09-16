@@ -1,0 +1,339 @@
+﻿@page "/cobranca/new"
+@page "/cobranca/edit/{id:int}"
+
+@inject TransacionadorService RecebedorPagadorService /*avaliar mudança*/
+@inject CobrancaService CobrancaService
+@inject ReciboService ReciboService
+
+@inject SweetAlert SweetAlert
+@inject NavigationManager NavigationManager
+
+@using FinanceWasm.Pages.Movimentacao.RecibosComponent
+
+<PageUpsert Title="Cobrança" Model="Cobranca" LinkPageIndex="./cobranca" @ref="PageUpsert">
+    <Form Model="Cobranca" OnValidSubmit="Save" Context="context">
+        <DataAnnotationsValidator />
+
+        <SectionForm IsLoaded="IsLoaded()">
+            <SectionTitle Title="Dados"/>
+
+            <FormGroup class="row g-3">
+
+                <div class="col-md-4">
+                    <InputTextCustom 
+                        @bind-Value="Cobranca.Descricao" 
+                        Validation="() => Cobranca.Descricao" 
+                        class="form-control" 
+                        disabled="@Disabled()"
+                         />
+                </div>
+                <div class="col-md-4">
+                    <SelectCustom
+                        @bind-Value="Cobranca.Tipo"
+                        Validation="() => Cobranca.Tipo"
+                        class="form-select"
+                        disabled="@Disabled()"
+                    >
+                        <option>-- SELECIONE --</option>
+                        @foreach (var item in Cobranca.GetTipos()) {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    </SelectCustom>
+                </div>
+
+                <div class="col-md-4">
+                    <SelectCustom
+                        @bind-Value="Cobranca.TransacionadorId"
+                        Validation="() => Cobranca.TransacionadorId"
+                        class="form-select"
+                        disabled="@Disabled()" 
+                    >
+                        <option value="0">-- SELECIONE --</option>
+                        @foreach (var item in RecebedoresPagadores) {
+                            <option value="@item.Id">@item.Nome</option>
+                        }
+                    </SelectCustom>
+                </div>
+               
+            </FormGroup>
+            
+            <FormGroup class="row g-3">
+                <div class="col-md-4">
+                    <SelectCustom  
+                        @bind-Value="Cobranca.TipoCobranca" 
+                        Validation="() => Cobranca.TipoCobranca"
+                        class="form-select"
+                        disabled="@Disabled()"
+                        
+                    >
+                       <option>-- SELECIONE --</option>
+                        @foreach (var item in Cobranca.GetTipoCobrancas()) {
+                            <option value="@item.Key">@item.Value</option>
+                        }
+                    </SelectCustom>
+                </div>
+
+                @if (Cobranca.TipoCobranca == TipoCobrancaEnum.Mensal) {
+                    <div class="col-md-2">
+                        <InputNumberCustom
+                            type="number"
+                            step="0.01"
+                            @bind-Value="Cobranca.QuantidadeParcelas"
+                            Validation="() => Cobranca.QuantidadeParcelas"
+                            class="form-control"
+                            disabled="@Disabled()"
+                             />
+                    </div>
+                }
+     
+                <div class="col-md-2">
+                    <InputNumberCustom 
+                        type="number"
+                        step="0.01"
+                        @bind-Value="Cobranca.Valor"
+                        Validation="() => Cobranca.Valor"
+                        disabled="@Disabled()"
+                        class="form-control" />
+                </div>
+            </FormGroup>
+        </SectionForm>
+
+        @if(Cobranca.Status != StatusEnum.Lancado) {
+            <SectionForm IsLoaded="IsLoaded()">
+                <SectionTitle Title="Recibos">
+                    @if (Cobranca.Status == StatusEnum.Concluir) {
+                        <button 
+                            class="btn btn-secondary" 
+                            @onclick="(() => AbrirPopUpRecibo())" 
+                            @onclick:preventDefault
+                        >
+                            <i class="fa-solid fa-plus"></i> Adicionar
+                        </button>
+                    }
+                </SectionTitle>
+
+                <Table Itens="Cobranca.Recibos">
+                    <THeader>
+                        <th>#</th>
+                        <th>Banco</th>
+                        <th>Valor</th>
+                        <th>Desconto</th>
+                        <th>Acréscimo</th>
+                        <th class="text-center">D. Pagamento</th>
+                        <th class="text-center">D. Cancelamento</th>
+                        <th class="text-center">Status</th>
+                        <th></th>
+                    </THeader>
+                    <TBody Context="recibo">
+                        <td>@recibo.Id</td>
+                        <td>@recibo.Banco?.Nome</td>
+                        <td>@recibo.Valor.CurrecyFormat()</td>
+                        <td>@recibo.Desconto.CurrecyFormat()</td>
+                        <td>@recibo.Acrescimo.CurrecyFormat()</td>
+                        <td class="text-center">@recibo.DataPagamento.FormatDateTime()</td>
+                        <td class="text-center">@recibo.DataCancelamento.FormatDateTime()</td>
+                        <td class="text-center">
+                           <Badge Label="@recibo.Status.ToString()" BadgeEnum="@GetReciboStatusColor(recibo)"/>
+                        </td>
+
+                        <td>
+                            @if (recibo.Status != StatusRecibo.Cancelado && (Cobranca.TipoCobranca != TipoCobrancaEnum.Indeterminado || Cobranca.TipoCobranca == TipoCobrancaEnum.Indeterminado && Cobranca.Status != StatusEnum.Pago))
+                            {
+                                <button type="button" @onclick="(() => CancelarRecibo(recibo))" class="btn btn-danger" title="Cancelar" data-toggle="tooltip" data-placement="top">
+                                    <i class="fa-solid fa-ban"></i>
+                                </button>
+                            }
+                        </td>
+                    </TBody>
+                </Table>
+             
+            </SectionForm>
+        } 
+        <ButtonForm IsNew="Id.IsNew()" DisabledSubmitButton="@(Disabled())" URL_Create_New="./cobranca/new" Reload="LoadCobranca">
+            @if(Cobranca.Status == StatusEnum.Lancado && !Id.IsNew()) {
+                <button class="btn btn-secondary" @onclick="Concluir" @onclick:preventDefault><i class="fa-solid fa-circle-check"></i> Concluir</button>
+            }
+
+            @if(Cobranca.Status == StatusEnum.Concluir && Cobranca.TipoCobranca == TipoCobrancaEnum.Indeterminado && Cobranca.Recibos.Any(r => r.Status == StatusRecibo.Ativo)) {
+                <button class="btn btn-secondary" @onclick="MarcarComoPago" @onclick:preventDefault><i class="fa-solid fa-circle-check"></i> Marcar como Pago</button>
+            }
+
+            @if(Cobranca.Status != StatusEnum.Lancado && Cobranca.Status != StatusEnum.Cancelado) {
+                <button class="btn btn-secondary" @onclick="Cancelar" @onclick:preventDefault><i class="fa-solid fa-ban"></i> Cancelar</button>
+            }
+
+        </ButtonForm>
+    </Form>
+</PageUpsert>
+
+<PopUp Title="Recibos" Type="PopUpType.Smaller" @ref="PopUpRecibo">
+    <ReciboPopUp Recibo="Recibo" Callback="TratarRecibo" />
+</PopUp>
+
+@code {
+    [Parameter]
+    public int Id { get; set; }
+
+    public Cobranca Cobranca { get; set; } = new();
+    public List<Transacionador> RecebedoresPagadores { get; set; }
+
+    PageUpsert<Cobranca> PageUpsert;
+    PopUp PopUpRecibo;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCobranca();
+
+        RecebedoresPagadores = await RecebedorPagadorService.GetAll();
+    }
+
+    async Task LoadCobranca(bool is_reload_new = false)
+    {
+        Cobranca = Id.IsNew() || is_reload_new ? new Cobranca() : await CobrancaService.GetById(Id);
+
+        PageUpsert?.ChangeStatusColor(GetCobrancaStatusColor());
+        if(Id.IsNew() || is_reload_new) {
+            PageUpsert?.HiddenStatusColor();
+        }
+    }
+
+    Recibo Recibo;
+    void AbrirPopUpRecibo(Recibo recibo = null)
+    {
+        Recibo = recibo ?? new();
+
+        PopUpRecibo.Open();
+    }
+
+    async Task TratarRecibo(Recibo recibo)
+    {
+        try {
+
+            if(!Cobranca.Recibos.Contains(recibo)) {
+                Cobranca.Recibos.Add(recibo);
+            }
+
+            var result = await ReciboService.EnviarRecibos(Cobranca.Id, Cobranca.Recibos);
+            await result.ThrowResponseError();
+
+            Cobranca.Recibos = result.Content.GetItem<List<Recibo>>();
+
+
+            PopUpRecibo.Close();
+            await SweetAlert.ToastAsync(SweetAlertType.Success, "Recibo adicionado com sucesso!");
+
+            await LoadCobranca();
+
+        } catch (Exception ex) {
+            if(recibo.Id.IsNew() && Cobranca.Recibos.Contains(recibo)) {
+                Cobranca.Recibos.Remove(recibo);    
+            }
+
+            await SweetAlert.ToastAsync(SweetAlertType.Error, ex.Message);
+        }
+    }
+
+    async Task Concluir()
+    {
+        if (!await SweetAlert.AlertConfirmationAsync("Tem certeza que deseja Concluir? Após realizar essa operação não será mais possível reverter.")) return;
+        await ChangeStatus(StatusEnum.Concluir);
+    }
+
+    async Task Cancelar()
+    {
+        if (!await SweetAlert.AlertConfirmationAsync("Tem certeza que deseja Cancelar? Após realizar essa operação não será mais possível reverter."))
+            return;
+        await ChangeStatus(StatusEnum.Cancelado);
+    }
+
+    async Task MarcarComoPago()
+    {
+        if (!await SweetAlert.AlertConfirmationAsync("Tem certeza que deseja Marcar como Pago?"))
+            return;
+
+        await ChangeStatus(StatusEnum.Pago);
+    }
+
+    async Task CancelarRecibo(Recibo recibo)
+    {
+        try {
+
+            if (!await SweetAlert.AlertConfirmationAsync($"Tem certeza que deseja Cancelar Recibo #{recibo.Id}? Após realizar essa operação não será mais possível reverter."))
+                return;
+
+            var result = await ReciboService.Cancelar(Cobranca.Id, recibo.Id);
+
+            await result.ThrowResponseError();
+
+            await SweetAlert.ToastAsync(SweetAlertType.Success, "Recibo Cancelado com Sucesso!");
+
+            await LoadCobranca();
+        } catch(Exception ex) {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, ex.Message);
+        }
+    }
+
+    public async Task Save()
+    {
+        try {
+            var result = Id.IsNew() ?
+                await CobrancaService.Post(Cobranca) :
+                await CobrancaService.Put(Cobranca, Id);
+
+            await result.ThrowResponseError();
+
+            Id = !Id.IsNew() ? Id : result.Content.GetItem<Cobranca>().Id;
+
+            await SweetAlert.ToastAsync(SweetAlertType.Success, Id.IsNew() ? "Registro salvo com sucesso!" : "Registro atualizado com sucesso!");
+
+            NavigationManager.NavigateTo($"cobranca/edit/{Id}");
+
+            await LoadCobranca();
+        }
+        catch (Exception e) {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, e.Message);
+        }
+
+        StateHasChanged();
+    }
+
+    public async Task ChangeStatus(StatusEnum status)
+    {
+        try {
+
+            var result = await CobrancaService.GetChangeStatus(Id, status.ToString());
+
+            await result.ThrowResponseError();
+
+            await SweetAlert.ToastAsync(SweetAlertType.Success, "Status alterado com sucesso.");
+
+            Cobranca.Status = status;
+
+            await LoadCobranca();
+        } catch(Exception e) {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, e.Message);
+        }
+    }
+
+    #region VALIDATION
+    bool IsLoaded() => 
+        RecebedoresPagadores is not null;
+
+    bool Disabled() =>
+        Cobranca.Status != StatusEnum.Lancado;
+
+    BadgeEnum GetReciboStatusColor(Recibo recibo) => 
+        recibo.Status switch {
+            StatusRecibo.Ativo => BadgeEnum.Success,
+            _ => BadgeEnum.Danger,
+        };
+
+    (PageUpsertStatusColor PageUpsertStatusColor, string Label)? GetCobrancaStatusColor() => Cobranca.Status switch {
+        StatusEnum.Lancado => (PageUpsertStatusColor.Warning, Cobranca.GetStatus()[Cobranca.Status]),
+        StatusEnum.Concluir => (PageUpsertStatusColor.Info, Cobranca.GetStatus()[Cobranca.Status]),
+        StatusEnum.Cancelado => (PageUpsertStatusColor.Danger, Cobranca.GetStatus()[Cobranca.Status]),
+        StatusEnum.Pago => (PageUpsertStatusColor.Success, Cobranca.GetStatus()[Cobranca.Status]),
+        _ => (PageUpsertStatusColor.Info, string.Empty)
+    };
+    #endregion
+}

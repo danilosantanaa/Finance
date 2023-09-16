@@ -1,0 +1,110 @@
+﻿@inject IJSRuntime IJSRuntime
+
+<AuthorizeView>
+    <DropDownMenu Header="@($"Olá, {context.User.Claims.FirstOrDefault(c => c.Type == "given_name")?.Value}.")" @ref="DropDownMenuProfile" RightPosition="28">
+
+        <a class="options" @onclick="TurnVisibilityChangeTheme">
+            <i class="fa-solid fa-moon"></i>
+            <span>Mudar Aparência</span>
+        </a>
+
+        <a class="options" href="./account/profile" @onclick="CloseAll">
+            <i class="fa-solid fa-address-card"></i>
+            <span>Editar Perfil</span>
+        </a>
+
+        @*<a class="options" href="./account/settings" @onclick="CloseAll">
+            <i class="fa-solid fa-gear"></i>
+            <span>Configurações</span>
+        </a>*@
+
+        <a href="./account/logout" class="options" @onclick="CloseAll">
+            <i class="fa-solid fa-arrow-right-from-bracket"></i>
+            <span>Sair da Conta</span>
+        </a>
+    </DropDownMenu>
+
+    <DropDownMenu Header="Mudar Aparência" @ref="DropDownMenuChangeTheme" PrevisousDropDownCalled="TurnVisibilityChangeTheme" RightPosition="28">
+        <p>Esta configuração será usada apenas neste navegador.</p>
+        @foreach(var item in GetThemeSelected()) {
+            <a class="options" @onclick="(() => ChangeTheme(item.Key))">
+                <i class="@(ThemeSelected == item.Key ? "fa-solid fa-check" : "none")"></i>
+                <span>@item.Value</span>
+            </a>
+        }
+    </DropDownMenu>
+</AuthorizeView>
+
+@code {
+    DropDownMenu DropDownMenuProfile;
+    DropDownMenu DropDownMenuChangeTheme;
+
+    Theme ThemeSelected;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await BindTheme();
+    }
+
+    #region PROFILE
+    public void TurnVisibilityProfile()
+    {
+        if (GetSubDropDownMenu().Any(dp => dp.IsVisible())) {
+
+            GetSubDropDownMenu().ForEach(dp => dp.TurnOff());
+
+            return;
+        }
+
+        DropDownMenuProfile.TurnVisibility();
+    }
+
+    void TurnVisibilityChangeTheme()
+    {
+        DropDownMenuChangeTheme.TurnVisibility();
+        DropDownMenuProfile.TurnVisibility();
+        StateHasChanged();
+    }
+
+    public void CloseAll()
+    {
+        TurnVisibilityProfile();
+        DropDownMenuProfile.TurnOff();
+    }
+
+    async Task BindTheme()
+    {
+        try
+        {
+            var themeLocalStorage = await IJSRuntime.InvokeAsync<string>("bindTheme");
+
+            ThemeSelected = (Theme)Enum.Parse(typeof(Theme), themeLocalStorage, true);
+        } catch(Exception ex) {
+            Console.WriteLine("Problema ao buscar tema. "+ ex.Message);
+        }
+    }
+
+    async Task ChangeTheme(Theme value)
+    {
+        try {
+            await IJSRuntime.InvokeVoidAsync("setTheme", value.ToString().ToLower());
+            await BindTheme();
+            StateHasChanged();
+
+        } catch(Exception e) {
+            Console.WriteLine("Problema ao trocar o tema."+ e.Message);
+        }
+    }
+
+    Dictionary<Theme, string> GetThemeSelected() => new Dictionary<Theme, string> {
+        { Theme.Auto, "Usar o tema do dispositivo" },
+        { Theme.Dark, "Tema Escuro" },
+        { Theme.Light, "Tema Claro" }
+    };
+
+    enum Theme {Auto, Dark, Light };
+
+    #endregion
+
+    public List<DropDownMenu> GetSubDropDownMenu() => new List<DropDownMenu>() { DropDownMenuChangeTheme };
+}

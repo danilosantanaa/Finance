@@ -1,0 +1,72 @@
+﻿@layout LoginLayout
+
+@page "/login"
+
+@attribute [AllowAnonymous]
+
+@inject AccountService AccountService
+@inject AuthProvider authProvider
+@inject ILocalStorageService localStorage
+@inject NavigationManager navigation
+
+<FormAccount>
+    <h2>Login</h2>
+
+    <Form Model="Login" OnValidSubmit="DoLogin">
+        <DataAnnotationsValidator />
+
+        <InputTextCustom @bind-Value="Login.UserName" Validation="() => Login.UserName" placeholder="Usuário" HiddenRequired="true"/>
+        
+        <InputTextCustom @bind-Value="Login.Password" Validation="() => Login.Password" type="password" placeholder="Senha" HiddenRequired="true" />
+        
+        <button class="btn btn-primary">Entrar <i class="fa-solid fa-right-to-bracket"></i></button>
+        
+        @if (!isLoaded)
+        {
+            <span style="color: red;">@response</span>
+        }
+    </Form>
+
+    <div class="controls-account">
+        <a class="link" href="#">Registrar</a>
+        <a class="link" href="#">Esqueceu a Senha?</a>
+    </div>
+</FormAccount>
+
+
+@code {
+    Login Login = new();
+
+    string response;
+    bool isLoaded = false;
+
+    async Task DoLogin()
+    {
+        try {
+            isLoaded = true;
+
+            var result = await AccountService.Login(Login);
+
+            if (!result.IsSuccessStatusCode) throw new Exception(await result.Content.ReadAsStringAsync());
+
+            var tokenResponse = await result.Content.ReadFromJsonAsync<TokenResponse>();
+
+            await authProvider.Login(tokenResponse.Token);
+
+            navigation.NavigateTo("/");
+
+        } catch (Exception ex) {
+            Console.WriteLine(ex);
+            response = ex.Message;
+        } finally {
+            isLoaded = false;
+        }
+    }
+
+    class TokenResponse
+    {
+        public string UserName { get; set; } 
+        public string PrimeiroNome { get; set; }
+        public string Token { get; set; }
+    }
+}

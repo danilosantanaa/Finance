@@ -1,0 +1,28 @@
+﻿@page "/categoria"
+@inject CategoriaService CategoriaService
+
+<PageIndex Title="Categorias" LinkAddition="./categoria/new">
+    <Table Itens="Categorias" LinkUpdate="@($"./categoria/edit/{{{nameof(Categoria.Id)}}}")" class="page">
+        <THeader>
+            <th scope="col">#</th>
+            <th scope="col">Descrição</th>
+            <th scope="col" class="text-center">Status</th>
+        </THeader>
+        <TBody Context="categoria">
+            <td scope="row">@categoria.Id</td>
+            <td>@categoria.Descricao</td>
+            <td class="text-center">
+                <Badge BadgeEnum="BadgeEnum.Primary" StatusBadge="categoria.Status" />
+            </td>
+        </TBody>
+    </Table>
+</PageIndex>
+
+@code {
+    List<Categoria> Categorias { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Categorias = await CategoriaService.GetAll();
+    }
+}

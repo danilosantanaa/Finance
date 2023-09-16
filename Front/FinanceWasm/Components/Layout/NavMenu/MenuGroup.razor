@@ -1,0 +1,18 @@
+﻿<div class="group-nav">
+
+    @if(!string.IsNullOrEmpty(Label)) {
+        <h4>@Label</h4>
+    }
+   
+    <div class="list-link">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter, EditorRequired]
+    public RenderFragment ChildContent { get; set; }
+}

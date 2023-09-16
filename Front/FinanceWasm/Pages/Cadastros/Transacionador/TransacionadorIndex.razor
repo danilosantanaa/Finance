@@ -1,0 +1,36 @@
+﻿@page "/transacionador"
+
+@inject TransacionadorService RecebedorPagadorService
+
+<PageIndex Title="Transacionadores" LinkAddition="./transacionador/new">
+    <Table Itens="Transacionadores" LinkUpdate="@($"./transacionador/edit/{{{nameof(Transacionador.Id)}}}")" class="page">
+        <THeader>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col">Email</th>
+            <th scope="col">Telefone</th>
+            <th scope="col">Categoria</th>
+            <th scope="col" class="text-center">Status</th>
+        </THeader>
+        <TBody Context="transacionador">
+            <td scope="row">@transacionador.Id</td>
+            <td>@transacionador.Nome</td>
+            <td>@transacionador.Email.FormatStringEmptyOrNull()</td>
+            <td>@transacionador.Telefone.FormatStringEmptyOrNull()</td>
+            <td>@transacionador.Categoria.Descricao</td>
+            
+            <td class="text-center">
+                <Badge BadgeEnum="BadgeEnum.Primary" StatusBadge="transacionador.Status" />
+            </td>
+        </TBody>
+    </Table>
+</PageIndex>
+
+@code {
+    public List<Transacionador> Transacionadores { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Transacionadores = await RecebedorPagadorService.GetAll();
+    }
+}

@@ -1,0 +1,40 @@
+﻿.logo {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 10px 20px;
+    align-items: center;
+    font-size: 1.3em;
+}
+
+.nav-bars {
+    width: 40px;
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 100%;
+    font-weight: bolder;
+    border: none;
+    background: transparent;
+    color: var(--text-surface-color);
+    padding: 0px;
+    margin: 0px;
+    cursor: pointer;
+}
+
+.nav-bars:hover {
+    background: var(--surface-color-hover);
+}
+
+.nav-bars:focus {
+    border: 1px solid var(--border-color);
+}
+
+a {
+    color: var(--text-surface-color);
+    text-decoration: none;
+    font-weight: bolder;
+    font-family: var(--font-family-color);
+    font-size: 1em;
+}

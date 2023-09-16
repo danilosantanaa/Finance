@@ -1,0 +1,49 @@
+﻿@* DEFAULT FRAMEWORKS BLAZOR OR C# *@
+@using System.Net.Http
+@using System.Net.Http.Json
+@using Microsoft.AspNetCore.Components.Forms
+@using Microsoft.AspNetCore.Components.Routing
+@using Microsoft.AspNetCore.Components.Web
+@using Microsoft.AspNetCore.Components.Web.Virtualization
+@using Microsoft.AspNetCore.Components.WebAssembly.Http
+@using Microsoft.AspNetCore.Components.Authorization
+@using Microsoft.AspNetCore.Authorization;
+@using System.ComponentModel.DataAnnotations;
+@using Microsoft.JSInterop
+@using FinanceWasm
+@using FinanceWasm.Shared
+
+@* LIBS DE TERCEIROS *@
+@using Blazored.LocalStorage;
+
+@* AUTHENTICATION *@
+@using FinanceWasm.Services.AuthProvider;
+@using System.Security.Claims;
+
+@* LAYOUT *@
+@using FinanceWasm.Components.Layout
+@using FinanceWasm.Components.Layout.NavMenu
+@using FinanceWasm.Components.Layout.TopMenu
+
+
+@* COMPONENTES *@
+@using FinanceWasm.Components.Form
+@using FinanceWasm.Components.Form.Button
+@using FinanceWasm.Components.Form.Inputs
+@using FinanceWasm.Components.Form.Selects
+@using FinanceWasm.Components.Spinner
+@using FinanceWasm.Components.Table
+@using FinanceWasm.Components.Page
+@using FinanceWasm.Components.Badge
+@using FinanceWasm.Components.PopUp
+@using FinanceWasm.Components.TootTip
+
+@* PAGE COMPONENTS *@
+@using FinanceWasm.Pages.Account.Components
+
+@* DEFAULTS *@
+@using FinanceWasm.Services
+@using FinanceWasm.Models
+@using FinanceWasm.Models.Account
+@using static FinanceWasm.Models.Enums.Cobrancas.CobrancaEnums;
+@using FinanceWasm.Helpers

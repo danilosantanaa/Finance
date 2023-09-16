@@ -1,0 +1,54 @@
+﻿::deep *,
+::deep *::before,
+::deep *::after {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.menu {
+    position: absolute;
+    z-index: 100;
+    background: rgba(0,0,0, .200);
+    width: 100vw;
+    height: 100vh;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.menu-content {
+    min-width: 250px;
+    width: fit-content;
+    background: var(--background-color);
+    height: 100vh;
+    transition: 400ms all ease-in-out;
+    box-shadow: 0px 0px 10px var(--box-shadow);
+    z-index: 101;
+}
+
+nav {
+    padding: 0px 10px;
+}
+
+::deep .group-nav:nth-child(n+2) {
+    border-top: 1px solid var(--border-color);
+}
+
+::deep .nav-link {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    padding: 10px;
+    color: var(--text-surface-color);
+    border-radius: 10px;
+    transition: 500ms all ease-in-out;
+}
+
+::deep a.nav-link:hover,
+::deep a.nav-link.active {
+    background: var(--surface-color-hover);
+}

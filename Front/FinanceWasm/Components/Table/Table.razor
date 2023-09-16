@@ -1,0 +1,92 @@
+﻿@using System.Linq.Expressions
+@using System.Reflection
+@using System.Text.RegularExpressions
+
+@inject NavigationManager Navigation
+
+@typeparam T
+
+@if (!IsLoading())
+{
+    <SpinnerRippleSVG />
+}
+else if (!Itens.Any())
+{
+    <p>@NoContentMessage</p>
+}
+else {
+    <div table-content @attributes="AdditionAttributes">
+        <table>
+            <thead>
+                <tr>
+                    @THeader
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Itens) {
+                    <tr @onclick="(() => NavigationTo(item))" @onclick:stopPropagation>
+                        @TBody(item)
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public List<T> Itens { get; set; }
+
+    [Parameter]
+    public RenderFragment THeader { get; set; }
+
+    [Parameter]
+    public RenderFragment<T> TBody { get; set; }
+
+    [Parameter]
+    public string LinkUpdate { get; set; }
+
+    [Parameter]
+    public string NoContentMessage { get; set; } = "Nenhum item encontrado.";
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionAttributes { get; set; }
+
+    void NavigationTo(T obj)
+    {
+        try {
+
+            if (string.IsNullOrEmpty(LinkUpdate)) return;
+
+            // Pega o nome do campo do templete ex."{NOME}"
+            var m = Regex.Match(LinkUpdate, @"[a-zA-Z0-9]+\/\{\s*([a-zA-Z0-9]+)\s*\}");
+
+            if(m.Success) {
+                var fieldName = m.Groups[1].Value;
+                
+                // Retira o templete da rota
+                string subroute = Regex.Replace(LinkUpdate, @"\/?\{\s*[a-zA-Z0-9]+\s*\}", "");
+
+                Navigation.NavigateTo($"{subroute}/{GetFieldValue(obj, fieldName)}");
+            }
+        } catch(Exception ex) {
+            Console.WriteLine(ex);
+        }
+    }
+
+    #region VALIDATIONS
+    object GetFieldValue(T obj, string fieldName)
+    {
+        Type t = obj.GetType();
+
+        PropertyInfo prop = t.GetProperty(fieldName);
+
+        var value = prop.GetValue(obj);
+
+        return value;
+    }
+
+    bool IsLoading() =>
+        Itens is not null;
+    #endregion
+}

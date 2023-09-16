@@ -1,0 +1,28 @@
+@page "/banco"
+@inject BancoService BancoService
+
+<PageIndex Title="Bancos" LinkAddition="./banco/new">
+    <Table Itens="Bancos" LinkUpdate="@($"./banco/edit/{{{nameof(Banco.Id)}}}")" class="page">
+        <THeader>
+            <th scope="col">#</th>
+            <th scope="col">Nome</th>
+            <th scope="col" class="text-center">Status</th>
+        </THeader>
+        <TBody Context="banco">
+            <td scope="row">@banco.Id</td>
+            <td>@banco.Nome</td>
+            <td class="text-center">
+                <Badge BadgeEnum="BadgeEnum.Primary" StatusBadge="banco.Status"/>
+            </td>
+        </TBody>
+    </Table>
+</PageIndex>
+
+@code {
+    List<Banco> Bancos;
+
+    protected async override Task OnInitializedAsync()
+    {
+        Bancos = await BancoService.GetAll();
+    }
+}

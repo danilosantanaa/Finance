@@ -1,0 +1,17 @@
+﻿<div class="section-title" @attributes="AdditionalAttribute">
+    <h3 class="title">@Title</h3>
+
+    <div class="section-buttons">
+        @ChildContent
+    </div>
+</div>
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttribute { get; set; }
+}

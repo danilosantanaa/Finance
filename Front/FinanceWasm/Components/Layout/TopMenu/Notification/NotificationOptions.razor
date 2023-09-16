@@ -1,0 +1,18 @@
+﻿
+<DropDownMenu Header="Notificações" @ref="DropDownMenuNotifications" RightPosition="86">
+    <p>Ainda será implementado.</p>
+</DropDownMenu>
+
+@code {
+    DropDownMenu DropDownMenuNotifications;
+
+    public void TurnVisibleNotification()
+    {
+        DropDownMenuNotifications.TurnVisibility();
+    }
+
+    public void CloseAll()
+    {
+        DropDownMenuNotifications.TurnOff();
+    }
+}

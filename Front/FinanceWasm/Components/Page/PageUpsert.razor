@@ -1,0 +1,75 @@
+﻿@inject NavigationManager Navigation
+
+@typeparam T
+
+@if(Model is null) {
+    <SpinnerRippleSVG />
+}
+else {
+
+    <PageTitle>@Title</PageTitle>
+
+    <div class="page-upsert">
+        <div class="page-header">
+            <div class="title">
+                @if (!string.IsNullOrEmpty(LinkPageIndex)) {
+                    <button title="Voltar" class="btn" @onclick="(() => Navigation.NavigateTo(LinkPageIndex))">
+                        <i class="fa-solid fa-arrow-left"></i>
+                    </button>
+                }
+
+                <h2>@Title</h2>
+            </div>
+
+            @if (_Status is not null)
+            {
+                <div class="status @_Status?.PageUpsertStatusColor.ToString().ToLower()">
+                    @_Status?.Label
+            </div>
+            }
+        </div>
+
+        <div class="page-body">
+            @ChildContent
+        </div>
+    </div>
+}
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; }
+
+    [Parameter]
+    public T Model { get; set; }
+
+    [Parameter]
+    public string LinkPageIndex { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    (PageUpsertStatusColor PageUpsertStatusColor, string Label)? _Status { get; set; } = null;
+
+    bool? _StatusBoolean { get; set; } = null;
+
+    public void ChangeStatusColor(bool? statusBoolean)
+    {
+        if(statusBoolean is not null) {
+            ChangeStatusColor((
+                statusBoolean.Value ? PageUpsertStatusColor.Success : PageUpsertStatusColor.Danger,
+                statusBoolean.Value.EnabledOrDisabled()
+            ));
+        }
+    }
+
+    public void ChangeStatusColor((PageUpsertStatusColor PageUpsertStatusColor, string Label)? status)
+    {
+        _Status = status;
+    }
+
+    public void HiddenStatusColor()
+    {
+        _Status = null;
+        StateHasChanged();
+    }
+}

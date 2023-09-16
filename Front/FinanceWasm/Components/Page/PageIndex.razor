@@ -1,0 +1,30 @@
+﻿@inject NavigationManager Navigation
+
+<div class="page-index">
+    <div class="page-header">
+        <h2>@Title</h2>
+
+        @if(!string.IsNullOrEmpty(LinkAddition)) {
+            <button class="btn btn-primary" @onclick="(() => Navigation.NavigateTo(LinkAddition))">
+                <i class="fa-solid fa-circle-plus"></i> Novo
+            </button>
+        }
+        
+    </div>
+    <div class="page-body">
+        @ChildContent
+    </div>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public string Title { get; set; }
+
+    [Parameter]
+    public string LinkAddition { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+
+}

@@ -1,0 +1,16 @@
+﻿.page {
+    box-shadow: 0px 0px 10px var(--box-shadow);
+}
+
+table td {
+    padding: 8px;
+}
+
+table tr {
+    border-bottom: 1px solid var(--border-color);
+}
+
+table tbody tr:hover {
+    cursor: pointer;
+    background: var(--surface-color-hover);
+}

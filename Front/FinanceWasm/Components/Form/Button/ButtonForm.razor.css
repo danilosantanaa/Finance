@@ -1,0 +1,11 @@
+﻿.button-form {
+    display: flex;
+    justify-content: flex-start;
+    position: sticky;
+    bottom: 10px;
+    left: 0px;
+    gap: 15px;
+    padding: 10px;
+    overflow-y: hidden;
+    overflow-x: auto;
+}

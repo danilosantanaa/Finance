@@ -1,0 +1,35 @@
+﻿@using FinanceWasm.Components.Layout.TopMenu.Profile
+@using FinanceWasm.Components.Layout.TopMenu.Notification
+
+<div class="options-content">
+    <div class="options">
+        <button @onclick="OpenNotificationOptions">
+            <i class="fa-regular fa-bell"></i>
+        </button>
+    </div>
+   
+    <div class="profile" @onclick="OpenProfileOptions">
+        <i class="fa-solid fa-user"></i>
+    </div>
+</div>
+
+<NotificationOptions @ref="NotificationOptions" />
+<ProfileOptions @ref="ProfileOptions" />
+
+@code {
+
+    ProfileOptions ProfileOptions;
+    NotificationOptions NotificationOptions;
+
+    public void OpenProfileOptions()
+    {
+        ProfileOptions.TurnVisibilityProfile();
+        NotificationOptions.CloseAll();
+    }
+
+    public void OpenNotificationOptions()
+    {
+        NotificationOptions.TurnVisibleNotification();
+        ProfileOptions.CloseAll();
+    }
+}

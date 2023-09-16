@@ -1,0 +1,116 @@
+﻿* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.container-popup {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    background: rgba(0,0,0,.544);
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 500;
+    width: 100%;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.popup {
+    background: var(--surface-color);
+    border-radius: 20px;
+    width: 50%;
+    padding: 0px 10px;
+    min-height: fit-content;
+    overflow: hidden;
+}
+
+.smaller {
+    width: 50%;
+    max-height: 50%;
+}
+
+.medium-sized {
+    width: 70%;
+    max-height: 70%;
+}
+
+.largest {
+    width: 90%;
+    max-height: 90%;
+}
+
+.popup > .header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2.5px solid var(--border-color);
+    padding: 20px 10px 10px 10px;
+}
+
+.popup > .header > h2 {
+    font-weight: bolder;
+    font-size: 1.7em;
+    line-height: normal;
+}
+
+.popup > .header > button {
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    font-size: 1.3em;
+    border: none;
+    color: var(--text-background-color);
+    background: transparent;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 100ms ease-in-out;
+}
+
+.popup > .header > button:hover {
+    font-size: 1.5em;
+    background: var(--surface-color-hover);
+}
+
+.body {
+    padding: 10px;
+    overflow-y: hidden;
+    position: relative;
+    height: 100%;
+}
+
+.body-content {
+    overflow: auto;
+    height: fit-content;
+}
+
+@media screen and (max-width: 700px) {
+
+    .popup > .header > h2 {
+        font-size: 1.5em;
+    }
+
+    .smaller,
+    .medium-sized,
+    largest {
+        width: 100%;
+        height: 100%;
+        min-height: initial;
+        max-height: initial;
+        border-radius: initial;
+    }
+}
+
+/*@media screen and (max-width: 400px) {
+    .popup > .header > h2 {
+        font-size: 1.3em;
+    }
+
+    .smaller, .medium-sized {
+        width: 90%;
+    }
+}
+*/

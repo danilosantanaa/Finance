@@ -1,0 +1,15 @@
+﻿*::after,
+*::before,
+* {
+    margin: 0px;
+    padding: 0px;
+}
+
+.section-title {
+    padding: 10px 0px;
+    display: flex;
+    justify-content: space-between;
+    align-content: center;
+    align-items: center;
+    border-bottom: 1px solid var(--border-color);
+}

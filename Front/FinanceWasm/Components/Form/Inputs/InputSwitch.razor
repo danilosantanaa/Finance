@@ -1,0 +1,45 @@
+﻿@using System.Linq.Expressions
+
+@typeparam T
+
+<div>
+    <div class="form-check form-switch">
+        <input class="form-check-input" type="checkbox" role="switch" id="flexSwitchCheckDefault" @onchange="InvokeValueChange" checked="@Value" @attributes="AdditionalAttribute">
+        <label class="form-check-label" for="flexSwitchCheckDefault">@Label</label>
+    </div>
+
+    @if(Validation != null) {
+        <ValidationMessage For="Validation" />
+    }
+    
+</div>
+
+@code {
+
+    [Parameter]
+    public string Label { get; set; }
+
+    [Parameter]
+    public T Value { get; set; }
+
+    [Parameter]
+    public EventCallback<T> ValueChanged { get; set; }
+
+    [Parameter]
+    public Expression<Func<T>>? Validation { get; set; }
+
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object> AdditionalAttribute { get; set; }
+
+    public async Task InvokeValueChange(ChangeEventArgs e)
+    {
+        try {
+
+            Value = (T) e.Value;
+
+            await ValueChanged.InvokeAsync(Value);
+        } catch (Exception ex) {
+            throw new Exception($"Problem to Convert. Erro: {ex.Message}");
+        }
+    }
+}

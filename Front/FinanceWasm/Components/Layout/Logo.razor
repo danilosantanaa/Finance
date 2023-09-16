@@ -1,0 +1,16 @@
+﻿<div class="logo">
+    
+    <button title="@Title" class="nav-bars" @onclick="(async () => await EventCallback.InvokeAsync())" @onclick:preventDefault @onclick:stopPropagation>
+        <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <a href="/">MyFinance</a>
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public EventCallback EventCallback { get; set; }
+
+    [Parameter]
+    public string Title { get; set; }
+}

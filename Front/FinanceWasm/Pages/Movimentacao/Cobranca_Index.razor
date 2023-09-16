@@ -1,0 +1,49 @@
+﻿@page "/cobranca"
+
+@inject CobrancaService CobrancaService
+
+<PageIndex Title="Cobranças" LinkAddition="./cobranca/new">
+    <Table Itens="Cobrancas" LinkUpdate="@($"./cobranca/edit/{{{nameof(Cobranca.Id)}}}")" class="page">
+        <THeader>
+            <th scope="col">#</th>
+            <th scope="col">Descrição</th>
+            <th scope="col">Tipo</th>
+            <th scope="col">Tipo Cobrança</th>
+            <th scope="col">Data de Emissão</th>
+            <th>Transacionador</th>
+            <th scope="col">Valor</th>
+            <th scope="col" class="text-center">Status</th>
+        </THeader>
+        <TBody Context="cobranca">
+        <td scope="row">@cobranca.Id</td>
+        <td>@cobranca.Descricao</td>
+        <td>@cobranca.Tipo</td>
+        <td>@Cobranca.GetTipoCobrancas()[(TipoCobrancaEnum)cobranca.TipoCobranca]</td>
+        <td>@cobranca.DataEmissao</td>
+        <td>@cobranca.Transacionador?.Nome</td>
+        <td>@cobranca.Valor.CurrecyFormat()</td>
+
+        <td class="text-center">
+            <Badge Label="@Cobranca.GetStatus()[cobranca.Status]" BadgeEnum="GetStatusColor(cobranca)" />
+        </td>
+        </TBody>
+    </Table>
+</PageIndex>
+
+@code {
+    public List<Cobranca> Cobrancas { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {
+        Cobrancas = await CobrancaService.GetAll();
+    }
+
+    BadgeEnum GetStatusColor(Cobranca cobranca) => cobranca.Status switch
+    {
+        StatusEnum.Lancado => BadgeEnum.Warning,
+        StatusEnum.Concluir => BadgeEnum.Info,
+        StatusEnum.Cancelado => BadgeEnum.Danger,
+        StatusEnum.Pago => BadgeEnum.Success,
+        _ => BadgeEnum.Light
+    };
+}

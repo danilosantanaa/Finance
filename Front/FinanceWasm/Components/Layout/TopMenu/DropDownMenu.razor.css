@@ -1,0 +1,98 @@
+﻿.drop-down-content {
+    display: flex;
+    flex-direction: column;
+    background: var(--surface-color);
+    position: absolute;
+    top: 55px;
+    color: var(--text-surface-color);
+    border-radius: 10px;
+    z-index: 20;
+    width: 300px;
+    max-height: 90vh;
+    box-shadow: 0px 0px 18px var(--box-shadow);
+    overflow: hidden;
+}
+
+.header {
+    display: flex;
+    gap: 5px;
+    border-bottom: 1px solid var(--border-color);
+    padding: 0px 5px;
+    align-items: center;
+    height: 50px;
+}
+
+.header button {
+    border: none;
+    border-radius: 50%;
+    height: 40px;
+    width: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: transparent;
+    color: var(--text-surface-color);
+}
+
+.header button:hover {
+    background-color: var(--surface-color-hover);
+}
+
+.body {
+   /* padding: 10px;*/
+   overflow: hidden;
+   box-sizing: border-box;
+   overflow-y: auto;
+}
+
+::deep .body p {
+    padding: 10px;
+    color: var(--spec-text-secondary);
+    -webkit-hyphens: auto;
+    -moz-hyphens: auto;
+    -ms-hyphens: auto;
+    hyphens: auto;
+}
+
+.header h2 {
+    font-size: 1.2em;
+    color: var(--text-background-color);
+}
+
+::deep .options {
+    display: flex;
+    gap: 30px;
+    width: 100%;
+    padding: 10px;
+    font-style: normal;
+    text-decoration: none;
+}
+
+::deep .options i.fa-solid {
+    display: flex;
+    align-items: center;
+}
+
+::deep .options i.none {
+    padding-left: 14px;
+    color: transparent;
+}
+
+::deep .options:hover {
+    background: var(--surface-color-hover);
+    cursor: pointer;
+}
+
+@media screen and (max-width: 408px) {
+    div.drop-down-content {
+        min-width: initial;
+        max-width: initial;
+        width: initial;
+        min-height: initial;
+        max-height: initial;
+        height: initial;
+        top: 45px;
+        left: 0px !important;
+        margin: 10px;
+    }
+}

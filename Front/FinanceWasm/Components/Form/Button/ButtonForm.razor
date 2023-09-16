@@ -1,0 +1,39 @@
+﻿@inject NavigationManager NavigationManager
+
+<div class="button-form">
+
+    <button class="btn btn-primary" type="submit" disabled="@DisabledSubmitButton"><i class="fa-solid fa-floppy-disk"></i> @(IsNew ? "Salvar" : "Atualizar")</button>
+
+    @if (!IsNew && !string.IsNullOrEmpty(URL_Create_New)) {
+        <button class="btn btn-secondary" type="button" @onclick="ToCreateNew"><i class="fa-solid fa-plus"></i> Novo</button>
+    }
+
+    @ChildContent
+
+    @if(IsNew) {
+        <button class="btn btn-secondary" type="reset"><i class="fa-solid fa-eraser" ></i> Limpar Campos</button>
+    }
+</div>
+
+@code {
+    [Parameter, EditorRequired]
+    public bool IsNew { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public bool DisabledSubmitButton { get; set; }
+
+    [Parameter]
+    public string URL_Create_New { get; set; }
+
+    [Parameter]
+    public EventCallback<bool> Reload { get; set; }
+
+    async Task ToCreateNew()
+    {
+        NavigationManager.NavigateTo(URL_Create_New);
+        await Reload.InvokeAsync(true);
+    }
+}

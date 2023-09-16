@@ -1,0 +1,12 @@
+﻿@inject AuthProvider AuthProvider
+
+<div class="top-menu">
+    <Logo EventCallback="(async () => await OpenMenu.InvokeAsync())" />
+
+    <Options />
+</div>
+
+@code {
+    [Parameter, EditorRequired] 
+    public EventCallback OpenMenu { get; set; }
+}

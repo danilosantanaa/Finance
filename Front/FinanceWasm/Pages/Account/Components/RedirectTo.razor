@@ -1,0 +1,11 @@
+﻿@inject NavigationManager navigator
+
+@code {
+    [Parameter]
+    public string URL { get; set; } = "/login";
+
+    protected override void OnInitialized()
+    {
+        navigator.NavigateTo(URL, true);
+    }
+}

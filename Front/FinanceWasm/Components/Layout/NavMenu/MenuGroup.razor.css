@@ -1,0 +1,17 @@
+﻿::deep *,
+::deep *::before,
+::deep *::after {
+    margin: 0px;
+    padding: 0px;
+    box-sizing: border-box;
+}
+
+.group-nav {
+    padding: 5px 0px;
+}
+
+h4 {
+    font-size: 1.2em;
+    color: var(--text-surface-color);
+    margin-bottom: 5px;
+}
