@@ -30,7 +30,7 @@ dotnet tool install --global dotnet-ef
 ```
 
 ## Rodando aplicação.
-<p>Para rodar aplicação, deve ter instalado antes o Dotnet e PostgreSQL. Como essa aplicação foi fatiada em duas, terá que executar o back-end e front-end. Caso não for utilizar um Visual Studo Code, será preciso abrir dois terminais e navegar até a pasta para executar. O Visual Studo Code permite abrir dois terminais, eu irei exemplificar com o CMD do Windows.</p>  
+<p>Para rodar aplicação, deve ter instalado antes o Dotnet e PostgreSQL. Como essa aplicação foi fatiada em duas, terá que executar o back-end e front-end separadamente. Caso não for utilizar um Visual Studo Code, será preciso abrir dois terminais e navegar até a pasta de cada projeto para executar. O Visual Studo Code permite abrir dois terminais, caso for utilizar. Eu irei exemplificar com o CMD do Windows.</p>  
 
 
 ### Aplicando as Migrations no Banco de Dados.
