@@ -1,7 +1,7 @@
 # Finance - Projeto de Estudo.
 
 ## Sobre o Projeto
-<p>O projeto tem como objetivo controle de finança pessoal, com objetivo de treinar programação, camada de software, modelagem, coletas de requisitos e técnicas para construir software que sejam fácil de manter manutenção. O projeto não refrete nada da vida real, é algo totalmente pessoal. O projeto foi dividido em duas parte: Back-End e Front-End. Tanto o Back-End quanto o Front-End, foi criado usando o Framework Dotnet Versão 7. Na parte do Back-End, foi usado o WebApi e Front-End foi utilizado o Blazor WebAssembley.</p>
+<p>O projeto de controle de finança pessoal, com objetivo de treinar programação, camada de software, modelagem, coletas de requisitos e técnicas para construir software que sejam fácil de manter manutenção. O projeto não refrete nada da vida real, é algo totalmente pessoal. O projeto foi dividido em duas parte: Back-End e Front-End. Tanto o Back-End quanto o Front-End, foi criado usando o Framework Dotnet Versão 7. Na parte do Back-End, foi usado o WebApi e Front-End foi utilizado o Blazor WebAssembley.</p>
 
 ## Requisitos para rodar o projeto
 
