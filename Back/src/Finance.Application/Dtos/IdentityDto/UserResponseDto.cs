@@ -13,5 +13,6 @@ namespace Finance.Application.Dtos.IdentityDto
         public string UltimoNome { get; set; }
         public string PhoneNumber { get; set; }
         public string Descricao { get; set; }
+        public string ImagemPerfil { get; set; }
     }
 }

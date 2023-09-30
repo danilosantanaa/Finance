@@ -14,13 +14,29 @@ namespace Finance.Application
             _hostEnvironment = hostEnvironment;
         }
 
+        private void CreateDirectoryIfNotExists(string dir)
+        {
+            if (!Directory.Exists(dir))
+            {
+                Directory.CreateDirectory(dir);
+            }
+        }
+
         public bool Delete(string fileName, string directory_path = "")
         {
             try
             {
-                var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "Resources", directory_path, fileName);
+
+                if (string.IsNullOrEmpty(fileName)) return false;
+
+                var directory = Path.Combine(_hostEnvironment.ContentRootPath, "Resources", directory_path);
+                CreateDirectoryIfNotExists(directory);
+
+                var filePath = Path.Combine(directory, fileName);
+
 
                 if (!File.Exists(filePath)) return false;
+
 
                 File.Delete(filePath);
 
@@ -61,7 +77,10 @@ namespace Finance.Application
 
             fileName = $"{fileName}{DateTime.UtcNow.ToString("yymmssfff")}{Path.GetExtension(file.FileName)}";
 
-            var filePath = Path.Combine(_hostEnvironment.ContentRootPath, "Resources", directory_path, fileName);
+            var directory = Path.Combine(_hostEnvironment.ContentRootPath, "Resources", directory_path);
+            CreateDirectoryIfNotExists(directory);
+
+            var filePath = Path.Combine(directory, fileName);
 
             using (var fileStream = new FileStream(filePath, FileMode.Create))
             {

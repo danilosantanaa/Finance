@@ -14,14 +14,19 @@ namespace Finance.API.Controllers
     {
         private readonly IAccountService _accountService;
         private readonly ITokenService _tokenService;
+        private readonly IUploadService _uploadService;
 
-        public AccountController(IAccountService accountService, ITokenService tokenService)
+        public AccountController(
+            IAccountService accountService,
+            ITokenService tokenService,
+            IUploadService uploadService)
         {
             _accountService = accountService;
             _tokenService = tokenService;
+            _uploadService = uploadService;
         }
 
-        [HttpGet("GetUser")]
+        [HttpGet("get-user")]
         public async Task<IActionResult> GetUser()
         {
             try
@@ -38,7 +43,7 @@ namespace Finance.API.Controllers
         }
 
         [AllowAnonymous]
-        [HttpPost("Register")]
+        [HttpPost("register")]
         public async Task<IActionResult> Register(UserDto userDto)
         {
             try
@@ -93,7 +98,7 @@ namespace Finance.API.Controllers
             }
         }
 
-        [HttpPut("UpdateUser")]
+        [HttpPut("update-user")]
         public async Task<IActionResult> UpdateUser(UserUpdateDto userUpdateDto)
         {
             try
@@ -110,6 +115,29 @@ namespace Finance.API.Controllers
             catch (Exception ex)
             {
                 return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar atualizar Usuário. Problema: {ex.Message}");
+            }
+        }
+
+        [HttpPut("foto-perfil")]
+        public async Task<IActionResult> UpdateFotoPerfil(IFormFile uploadFile)
+        {
+            try
+            {
+                var user = await _accountService.GetUserByUserNameAsync(User.GetUserName());
+                if (user is null || uploadFile is null) return NoContent();
+
+
+                _uploadService.Delete(user.ImagemPerfil, User.GetUserName());
+                user.ImagemPerfil = await _uploadService.Save(uploadFile, User.GetUserName());
+
+                var ok = await _accountService.UpdateFotoPerfil(user.ImagemPerfil, user.Id);
+
+                return ok ? Ok() : BadRequest();
+            }
+            catch (Exception ex)
+            {
+
+                return this.StatusCode(StatusCodes.Status500InternalServerError, $"Erro ao tentar atualizar Usuário. Problema: {ex.Message}"); ;
             }
         }
     }

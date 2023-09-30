@@ -14,5 +14,6 @@ namespace Finance.Application.Contratos
         Task<SignInResult> CheckUserPasswordAsync(UserLoginDto userLoginDto, string password);
         Task<UserResponseDto> CreateAccountAsync(UserDto userDto);
         Task<UserResponseDto> UpdateAccountAsync(UserUpdateDto userUpdateDto, int userId);
+        Task<bool> UpdateFotoPerfil(string foto_Url, int userId);
     }
 }

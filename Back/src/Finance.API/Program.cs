@@ -6,11 +6,9 @@ using Finance.Domain.Identity;
 using Finance.Persistence;
 using Finance.Persistence.Contextos;
 using Finance.Persistence.Contratos;
-using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
@@ -104,11 +102,8 @@ builder.Services.AddScoped<IGeneralPersistence, GeneralPersistence>();
 builder.Services.AddScoped<IBancoPersistence, BancoPersistence>();
 builder.Services.AddScoped<ICobrancaPersistence, CobrancaPersistence>();
 builder.Services.AddScoped<IReciboPersistence, ReciboPersistence>();
-
 builder.Services.AddScoped<ICategoriaPersistence, CategoriaPersistence>();
-
 builder.Services.AddScoped<ITransacionadorPersistence, TransacionadorPersistence>();
-
 builder.Services.AddScoped<IUserPersistence, UserPersistence>();
 #endregion
 
@@ -116,13 +111,11 @@ builder.Services.AddScoped<IUserPersistence, UserPersistence>();
 builder.Services.AddScoped<IBancoService, BancoService>();
 builder.Services.AddScoped<ICobrancaService, CobrancaService>();
 builder.Services.AddScoped<IReciboService, ReciboService>();
-
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
-
 builder.Services.AddScoped<ITransacionadorService, TransacionadorService>();
-
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddScoped<IUploadService, UploadService>();
 #endregion
 
 var app = builder.Build();
