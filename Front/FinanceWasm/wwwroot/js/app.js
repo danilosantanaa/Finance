@@ -54,3 +54,11 @@ function assigmentTheme(theme) {
 function getThemeLocalStorage() {
     return localStorage.getItem('theme')
 }
+
+/**
+ * @param {string} selector
+ */
+function openInputFile(selector) {
+    var input = document.querySelector(selector);
+    input.click();
+}

@@ -1,10 +1,14 @@
 ﻿@page "/account/profile"
 
 @inject AccountService AccountService
+@inject IJSRuntime JsRuntine
+@inject IConfiguration configuration
+@inject SweetAlert Alert
 
 <PageUpsert Model="Account" Title="Editar Conta">
     <div class="profile-content">
-        <div class="photo-profile male">
+        <InputFile OnChange="LoadFile" @ref="InputFile" id="file-profile" hidden />
+        <div class="photo-profile @(string.IsNullOrEmpty(Account.ImagemPerfil) ? "male" : "photo-account-profile")" @onclick="OpenInputFile">
             <div class="edit-controls">
                 <button class="edit" title="Editar foto de perfil">
                     <i class="fa-solid fa-pen"></i>
@@ -74,13 +78,49 @@
 
         <ButtonForm IsNew="false" />
     </Form>
+
+    <style>
+        .photo-account-profile {
+            background-image: url(@GetUrlResourceImage());
+            background-size: cover;
+            background-position: center center;       
+        }
+    </style>
 </PageUpsert>
 
 @code {
     Account Account;
+    InputFile InputFile;
 
     protected override async Task OnInitializedAsync()
     {
+        await LoadAccount();
+    }
+
+    async Task LoadAccount()
+    {
         Account = await AccountService.GetProfile();
     }
+
+    async Task OpenInputFile()
+    {
+        await JsRuntine.InvokeVoidAsync("openInputFile", "#file-profile");
+    }
+
+    async Task LoadFile(InputFileChangeEventArgs e)
+    {
+        try {
+            await AccountService.EnviarFotoPerfil(e.File);
+            await LoadAccount();
+
+            await Alert.ToastAsync(SweetAlertType.Success, "Foto atualizado com sucesso!");
+
+        } catch(Exception ex) {
+            Console.WriteLine(ex.Message);
+            await Alert.ToastAsync(SweetAlertType.Error, "Problema ao tentar atualizar a foto");
+        }
+    }
+
+    string GetUrlResourceImage() =>
+        $"{configuration["ApiConfig:Host"]}/resources/{Account.UserName}/{Account.ImagemPerfil}";
 }

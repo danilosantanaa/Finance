@@ -119,7 +119,7 @@ namespace Finance.API.Controllers
         }
 
         [HttpPut("foto-perfil")]
-        public async Task<IActionResult> UpdateFotoPerfil(IFormFile uploadFile)
+        public async Task<IActionResult> UpdateFotoPerfil(IFormCollection uploadFile)
         {
             try
             {
@@ -128,7 +128,7 @@ namespace Finance.API.Controllers
 
 
                 _uploadService.Delete(user.ImagemPerfil, User.GetUserName());
-                user.ImagemPerfil = await _uploadService.Save(uploadFile, User.GetUserName());
+                user.ImagemPerfil = await _uploadService.Save(uploadFile.Files[0], User.GetUserName());
 
                 var ok = await _accountService.UpdateFotoPerfil(user.ImagemPerfil, user.Id);
 
