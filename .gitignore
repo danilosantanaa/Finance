@@ -477,3 +477,4 @@ $RECYCLE.BIN/
 *.lnk
 
 Resources
+appsettings.Development.json
