@@ -478,3 +478,6 @@ $RECYCLE.BIN/
 
 Resources
 appsettings.Development.json
+
+Back/src/.vscode
+Back/src/.vs
