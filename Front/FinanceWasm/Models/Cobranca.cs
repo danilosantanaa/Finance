@@ -25,7 +25,7 @@ namespace FinanceWasm.Models
         [Display(Name = "Tipo Cobrança")]
         [Required(ErrorMessage = ModelMessageErro.REQUIRED)]
         [JsonConverter(typeof(JsonStringEnumConverter))]
-        public CobrancaEnums.TipoCobrancaEnum? TipoCobranca { get; set; } = null;
+        public CobrancaEnums.TipoCobrancaEnum TipoCobranca { get; set; }
 
         [JsonConverter(typeof(JsonStringEnumConverter))]
         public CobrancaEnums.StatusEnum Status { get; set; } = CobrancaEnums.StatusEnum.Lancado;
@@ -35,6 +35,11 @@ namespace FinanceWasm.Models
 
         public double Valor { get; set; }
         public DateTime DataEmissao { get; set; }
+
+        public double GetValorDaCobrancaAtual() =>
+            TipoCobranca == CobrancaEnums.TipoCobrancaEnum.Mensal ? 
+                Valor / QuantidadeParcelas 
+            : Valor;
 
         [Required]
         [Display(Name = "Transacionador")]

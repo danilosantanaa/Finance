@@ -17,7 +17,7 @@
         </div>
     </div>
 
-    <Form Model="Account" class="mt-5">
+    <Form Model="Account" class="mt-5" OnValidSubmit="Save">
         <DataAnnotationsValidator />
 
         <SectionForm>
@@ -66,8 +66,8 @@
 
                 <div class="col-md-2">
                     <InputTextCustom 
-                        @bind-Value="Account.SenhaAntiga"
-                        Validation="() => Account.SenhaAntiga"
+                        @bind-Value="Account.OldPassword"
+                        Validation="() => Account.OldPassword"
                         type="password"
                         class="form-control" />
                 </div>
@@ -124,6 +124,22 @@
         }
     }
 
+    public async Task Save()
+    {
+        try {
+            var result = await AccountService.UpdateUser(Account);
+
+            await result.ThrowExceptionIfResponseError();
+            await LoadAccount();
+
+            await Alert.ToastAsync(SweetAlertType.Success, "Dados atualizado com sucesso!");
+        } catch(Exception ex) {
+            await Alert.ToastAsync(SweetAlertType.Error, ex.Message);
+        }
+    }
+
+    #region VALIDATIONS
     string GetUrlResourceImage() =>
         $"{configuration["ApiConfig:Host"]}/resources/{Account.UserName}/{Account.ImagemPerfil}";
+    #endregion
 }

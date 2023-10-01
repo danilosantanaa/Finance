@@ -20,6 +20,11 @@ namespace FinanceWasm.Services {
         #region POST
         public async Task<HttpResponseMessage> Login(Login login) =>
             await _httpClientService.PostAsJsonAsync("./api/account/login", login);
+        #endregion
+
+        #region PUT
+        public async Task<HttpResponseMessage> UpdateUser(Account account) =>
+            await _httpClientService.PutAsJsonAsync("./api/account/update-user", account);
 
         public async Task<HttpResponseMessage> EnviarFotoPerfil(IBrowserFile file)
         {

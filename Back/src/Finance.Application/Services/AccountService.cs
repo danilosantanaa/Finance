@@ -34,7 +34,7 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao tentar verificar senha. Erro: {ex.Message}");
+            throw new Exception(ex.Message);
         }
     }
 
@@ -55,7 +55,7 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao tentar Criar Usuário. Erro: {ex.Message}");
+            throw new Exception(ex.Message);
         }
     }
 
@@ -70,7 +70,7 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao tentar pegar Usuário por Username: {ex.Message}");
+            throw new Exception(ex.Message);
         }
     }
 
@@ -83,10 +83,18 @@ public class AccountService : IAccountService
 
             _mapper.Map(userUpdateDto, user);
 
-            //TODO: Implementar a funcionalidade de se caso preencher a nova senha e não bater, lançar um erro.
-            // Se caso a senha antiga não bater, lançar uma exceção também.
-            if (!string.IsNullOrEmpty(userUpdateDto.Password) && userUpdateDto.ConfirmPassword.Equals(userUpdateDto.ConfirmPassword))
+
+            var userLoginDto = _mapper.Map<UserLoginDto>(user);
+            if (!string.IsNullOrEmpty(userUpdateDto.OldPassword))
             {
+                var signResult = await CheckUserPasswordAsync(userLoginDto, userUpdateDto.OldPassword);
+
+                if (!signResult.Succeeded)
+                    throw new ExceptionServiceBadRequestError("Senha Inválida!");
+
+                if (string.IsNullOrEmpty(userUpdateDto.Password) || !userUpdateDto.Password.Equals(userUpdateDto.ConfirmPassword))
+                    throw new ExceptionServiceBadRequestError("Senha de Confirmação não conferi.");
+
                 var token = await _userManager.GeneratePasswordResetTokenAsync(user);
                 var result = await _userManager.ResetPasswordAsync(user, token, userUpdateDto.Password);
             }
@@ -104,7 +112,7 @@ public class AccountService : IAccountService
         }
         catch (Exception ex)
         {
-            throw new Exception($"Erro ao tentar Atualizar Usuário. Erro: {ex.Message}");
+            throw new Exception(ex.Message);
         }
     }
 
@@ -125,7 +133,7 @@ public class AccountService : IAccountService
         catch (Exception ex)
         {
 
-            throw new Exception($"Erro ao tentar Atualizar Foto de Perfil. Erro: {ex.Message}");
+            throw new Exception(ex.Message);
         }
     }
 

@@ -25,7 +25,7 @@ function ToastAlert(title, type, timer = 2000) {
         toast: true,
         icon: TYPEICON[type],
         title,
-        position: 'top-right',
+        position: 'bottom-end',
         showConfirmButton: false,
         timer,
         timerProgressBar: true,

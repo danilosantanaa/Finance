@@ -7,7 +7,23 @@
         <DataAnnotationsValidator />
 
         <SectionForm IsLoaded="IsLoaded()" class="border-0 shadow-none">
+            <FormGroup class="row g-12">
+                <div class="d-flex gap-4 mb-2">
+                    <span>
+                        <strong>Tipo da Cobrança:</strong>
+                        @Cobranca.GetTipoCobrancas()[Cobranca.TipoCobranca]
+                    </span>
 
+                    <span>
+                        <strong>Valor da Cobrança:</strong>
+                        @Cobranca.GetValorDaCobrancaAtual().CurrecyFormat()
+                    </span>
+                </div>
+            </FormGroup>
+        </SectionForm>
+
+        <SectionForm IsLoaded="IsLoaded()" class="border-0 shadow-none">
+          
             <FormGroup class="row g-4">
                 <div class="col-md-4">
                     <SelectCustom  
@@ -56,6 +72,9 @@
 }
 
 @code {
+    [Parameter, EditorRequired]
+    public Cobranca Cobranca { get; set; }
+
     [Parameter, EditorRequired]
     public Recibo Recibo { get; set; }
 

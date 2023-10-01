@@ -164,11 +164,12 @@
 
         </ButtonForm>
     </Form>
+
+    <PopUp Title="Recibos" Type="PopUpType.Smaller" @ref="PopUpRecibo">
+        <ReciboPopUp Cobranca="Cobranca" Recibo="Recibo" Callback="TratarRecibo" />
+    </PopUp>
 </PageUpsert>
 
-<PopUp Title="Recibos" Type="PopUpType.Smaller" @ref="PopUpRecibo">
-    <ReciboPopUp Recibo="Recibo" Callback="TratarRecibo" />
-</PopUp>
 
 @code {
     [Parameter]
@@ -214,7 +215,7 @@
             }
 
             var result = await ReciboService.EnviarRecibos(Cobranca.Id, Cobranca.Recibos);
-            await result.ThrowResponseError();
+            await result.ThrowExceptionIfResponseError();
 
             Cobranca.Recibos = result.Content.GetItem<List<Recibo>>();
 
@@ -263,7 +264,7 @@
 
             var result = await ReciboService.Cancelar(Cobranca.Id, recibo.Id);
 
-            await result.ThrowResponseError();
+            await result.ThrowExceptionIfResponseError();
 
             await SweetAlert.ToastAsync(SweetAlertType.Success, "Recibo Cancelado com Sucesso!");
 
@@ -280,7 +281,7 @@
                 await CobrancaService.Post(Cobranca) :
                 await CobrancaService.Put(Cobranca, Id);
 
-            await result.ThrowResponseError();
+            await result.ThrowExceptionIfResponseError();
 
             Id = !Id.IsNew() ? Id : result.Content.GetItem<Cobranca>().Id;
 
@@ -303,7 +304,7 @@
 
             var result = await CobrancaService.GetChangeStatus(Id, status.ToString());
 
-            await result.ThrowResponseError();
+            await result.ThrowExceptionIfResponseError();
 
             await SweetAlert.ToastAsync(SweetAlertType.Success, "Status alterado com sucesso.");
 

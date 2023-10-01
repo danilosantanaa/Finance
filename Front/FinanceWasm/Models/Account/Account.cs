@@ -28,7 +28,7 @@ namespace FinanceWasm.Models.Account {
         public string Token { get; set; }
 
         [Display(Name = "Senha Antiga")]
-        public string SenhaAntiga { get; set; }
+        public string OldPassword { get; set; }
 
         public string ImagemPerfil { get; set; }
     }

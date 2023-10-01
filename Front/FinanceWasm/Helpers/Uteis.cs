@@ -5,7 +5,7 @@ namespace FinanceWasm.Helpers {
     public static class Uteis {
         public static bool IsNew(this int Id) => Id == 0;
         public static T GetItem<T>(this HttpContent content) => content.ReadFromJsonAsync<T>().Result;
-        public static async Task ThrowResponseError(this HttpResponseMessage response)
+        public static async Task ThrowExceptionIfResponseError(this HttpResponseMessage response)
         {
             if (!response.IsSuccessStatusCode) {
                 if (response.StatusCode == System.Net.HttpStatusCode.BadRequest) {
