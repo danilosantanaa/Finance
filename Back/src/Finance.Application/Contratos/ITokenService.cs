@@ -1,9 +1,8 @@
 using Finance.Application.Dtos.IdentityDto;
 
-namespace Finance.Application.Contratos
+namespace Finance.Application.Contratos;
+
+public interface ITokenService
 {
-    public interface ITokenService
-    {
-        Task<string> CreateToken(UserResponseDto userResponseDto);
-    }
+    Task<string> CreateToken(UserResponseDto userResponseDto);
 }

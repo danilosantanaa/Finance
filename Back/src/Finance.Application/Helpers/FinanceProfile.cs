@@ -10,34 +10,33 @@ using Finance.Application.Dtos.TransacionadoresDtos;
 using Finance.Domain;
 using Finance.Domain.Identity;
 
-namespace Finance.Application.Helpers
+namespace Finance.Application.Helpers;
+
+public class FinanceProfile : Profile
 {
-    public class FinanceProfile : Profile
+    public FinanceProfile()
     {
-        public FinanceProfile()
-        {
-            #region DOMINIO
-            CreateMap<Banco, BancoDto>().ReverseMap();
-            CreateMap<Transacionador, TransacionadorRequestDto>().ReverseMap();
-            CreateMap<Transacionador, TransacionadorResponseDto>().ReverseMap();
-            CreateMap<Cidade, CidadeDto>().ReverseMap();
-            CreateMap<Estado, EstadoDto>().ReverseMap();
-            CreateMap<Endereco, EnderecoResponseDto>().ReverseMap();
-            CreateMap<Endereco, EnderecoRequestDto>().ReverseMap();
-            CreateMap<Categoria, CategoriaDto>().ReverseMap();
-            CreateMap<Cobranca, CobrancaDto>().ReverseMap();
-            CreateMap<Recibo, ReciboDto>().ReverseMap();
-            CreateMap<Recibo, ReciboResponseDto>().ReverseMap();
-            CreateMap<Movimentacao, MovimentacaoDto>().ReverseMap();
-            #endregion
+        #region DOMINIO
+        CreateMap<Banco, BancoDto>().ReverseMap();
+        CreateMap<Transacionador, TransacionadorRequestDto>().ReverseMap();
+        CreateMap<Transacionador, TransacionadorResponseDto>().ReverseMap();
+        CreateMap<Cidade, CidadeDto>().ReverseMap();
+        CreateMap<Estado, EstadoDto>().ReverseMap();
+        CreateMap<Endereco, EnderecoResponseDto>().ReverseMap();
+        CreateMap<Endereco, EnderecoRequestDto>().ReverseMap();
+        CreateMap<Categoria, CategoriaDto>().ReverseMap();
+        CreateMap<Cobranca, CobrancaDto>().ReverseMap();
+        CreateMap<Recibo, ReciboDto>().ReverseMap();
+        CreateMap<Recibo, ReciboResponseDto>().ReverseMap();
+        CreateMap<Movimentacao, MovimentacaoDto>().ReverseMap();
+        #endregion
 
-            #region IDENTITY
-            CreateMap<User, UserResponseDto>().ReverseMap();
-            CreateMap<User, UserDto>().ReverseMap();
-            CreateMap<User, UserLoginDto>().ReverseMap();
-            CreateMap<User, UserUpdateDto>().ReverseMap();
+        #region IDENTITY
+        CreateMap<User, UserResponseDto>().ReverseMap();
+        CreateMap<User, UserDto>().ReverseMap();
+        CreateMap<User, UserLoginDto>().ReverseMap();
+        CreateMap<User, UserUpdateDto>().ReverseMap();
 
-            #endregion
-        }
+        #endregion
     }
 }

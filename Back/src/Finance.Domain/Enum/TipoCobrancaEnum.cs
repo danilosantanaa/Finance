@@ -1,9 +1,8 @@
-namespace Finance.Domain.Enum
+namespace Finance.Domain.Enum;
+
+public enum TipoCobrancaEnum
 {
-    public enum TipoCobrancaEnum
-    {
-        Mensal,
-        Avista,
-        Indeterminado
-    }
+    Mensal,
+    Avista,
+    Indeterminado
 }

@@ -1,8 +1,7 @@
-namespace Finance.Domain.Enum
+namespace Finance.Domain.Enum;
+
+public enum ReciboStatusEnum
 {
-    public enum ReciboStatusEnum
-    {
-        Cancelado,
-        Ativo
-    }
+    Cancelado,
+    Ativo
 }

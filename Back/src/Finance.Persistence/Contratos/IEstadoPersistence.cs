@@ -1,7 +1,6 @@
-namespace Finance.Persistence.Contratos
-{
-    public interface IEstadoPersistence : IGeneralPersistence
-    {
+namespace Finance.Persistence.Contratos;
 
-    }
+public interface IEstadoPersistence : IGeneralPersistence
+{
+
 }

@@ -1,10 +1,9 @@
-namespace Finance.Domain.Enum
+namespace Finance.Domain.Enum;
+
+public enum CobrancaStatusEnum
 {
-    public enum CobrancaStatusEnum
-    {
-        Lancado,
-        Cancelado,
-        Pago,
-        Concluir
-    }
+    Lancado,
+    Cancelado,
+    Pago,
+    Concluir
 }

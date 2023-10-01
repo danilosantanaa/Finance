@@ -1,8 +1,7 @@
-namespace Finance.Domain.Enum
+namespace Finance.Domain.Enum;
+
+public enum TipoEnum
 {
-    public enum TipoEnum
-    {
-        Pagar,
-        Receber
-    }
+    Pagar,
+    Receber
 }

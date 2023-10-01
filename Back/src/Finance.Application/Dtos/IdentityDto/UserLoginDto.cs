@@ -1,13 +1,10 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Finance.Application.Attributes;
 
-namespace Finance.Application.Dtos.IdentityDto
+namespace Finance.Application.Dtos.IdentityDto;
+
+public class UserLoginDto
 {
-    public class UserLoginDto
-    {
-        public string UserName { get; set; }
-        public string Password { get; set; }
-    }
+    [TreatSpaces]
+    public string UserName { get; set; }
+    public string Password { get; set; }
 }
