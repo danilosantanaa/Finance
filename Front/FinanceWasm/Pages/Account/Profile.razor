@@ -110,7 +110,10 @@
     async Task LoadFile(InputFileChangeEventArgs e)
     {
         try {
-            await AccountService.EnviarFotoPerfil(e.File);
+            var result = await AccountService.EnviarFotoPerfil(e.File);
+            if (!result.IsSuccessStatusCode) 
+                throw new Exception("Houve um erro de processamento no servidor.");
+
             await LoadAccount();
 
             await Alert.ToastAsync(SweetAlertType.Success, "Foto atualizado com sucesso!");
