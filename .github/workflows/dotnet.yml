@@ -26,5 +26,3 @@ jobs:
       run: dotnet build Back/src/ --no-restore
     - name: Test
       run: dotnet test  Back/src/ --no-build --verbosity normal
-    - name: Run
-      run: dotnet watch run -p Back/src/Finance.API
