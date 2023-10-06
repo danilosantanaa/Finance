@@ -26,3 +26,16 @@ jobs:
       run: dotnet build Back/src/ --no-restore
     - name: Test
       run: dotnet test  Back/src/ --no-build --verbosity normal
+      
+  Front:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: actions/checkout@v3
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 7.0.x
+    - name: Restore dependencies
+      run: dotnet restore Front/FinanceWasm/
+    - name: Build
+      run: dotnet build Front/FinanceWasm/ --no-restore
