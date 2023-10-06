@@ -27,4 +27,8 @@
     <ProjectReference Include="..\Finance.Application\Finance.Application.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Resources\" />
+  </ItemGroup>
+
 </Project>
