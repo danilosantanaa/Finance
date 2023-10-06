@@ -477,6 +477,6 @@ $RECYCLE.BIN/
 *.lnk
 
 appsettings.Development.json
-Resources/*
+Back/src/Finance.API/Resources/*.*
 # .vscode
 # .vs
