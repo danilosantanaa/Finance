@@ -5,7 +5,7 @@ public class CobrancaServiceTest
     [Fact]
     public void Teste()
     {
-        var teste = true;
+        var teste = false;
 
         Assert.True(teste);
     }
