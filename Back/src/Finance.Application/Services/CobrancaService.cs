@@ -25,10 +25,10 @@ public class CobrancaService : ICobrancaService
         {
 
             if (cobranca.TipoCobranca == TipoCobrancaEnum.Mensal && cobranca.QuantidadeParcelas == 0)
-                throw new ExceptionServiceBadRequestError("Para cobrança do tipo Mensal, deve-se informar a quantidade.");
+                throw new ExceptionServiceBadRequestError("Para cobrança do tipo Mensal, deve-se informar a Quantidade.");
 
             if (cobranca.TipoCobranca == TipoCobrancaEnum.Mensal && cobranca.Valor == 0)
-                throw new ExceptionServiceBadRequestError("Para cobrança do tipo Mensal, o valor não pode ser zerado.");
+                throw new ExceptionServiceBadRequestError("Para cobrança do tipo Mensal, o Valor não pode ser zerado.");
         }
         catch (ExceptionServiceBadRequestError ex)
         {
@@ -59,9 +59,7 @@ public class CobrancaService : ICobrancaService
 
             if (await _cobrancaPersistence.SaveChangesAsync())
             {
-                var cobrancaRetorno = await _cobrancaPersistence.GetByIdAsync(userId, cobranca.Id);
-
-                return _mapper.Map<CobrancaDto>(cobrancaRetorno);
+                return _mapper.Map<CobrancaDto>(cobranca);
             }
 
             return null;
@@ -72,6 +70,7 @@ public class CobrancaService : ICobrancaService
         }
         catch (Exception ex)
         {
+            Console.WriteLine(ex.ToString());
             throw new Exception(ex.Message);
         }
     }
