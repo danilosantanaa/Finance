@@ -1,4 +1,5 @@
 ﻿using Finance.Application.Dtos.CobrancaDtos;
+using Finance.Domain.Enum;
 
 namespace Finance.Test;
 
@@ -33,5 +34,13 @@ public static class CobrancaFixture
         Valor = 0,
         QuantidadeParcelas = 10,
         TipoCobranca = "Mensal"
+    };
+
+    public static CobrancaDto GetCobrancaDtoStatusPago() => new CobrancaDto
+    {
+        Descricao = "Cobrança Paga",
+        Valor = 500,
+        TipoCobranca = TipoCobrancaEnum.Avista.ToString(),
+        Status = CobrancaStatusEnum.Pago.ToString()
     };
 }

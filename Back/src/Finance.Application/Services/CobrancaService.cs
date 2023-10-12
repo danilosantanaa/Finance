@@ -51,6 +51,7 @@ public class CobrancaService : ICobrancaService
             cobranca.Recibos = null;
             cobranca.User = null;
             cobranca.Status = CobrancaStatusEnum.Lancado;
+            cobranca.Transacionador = null;
             cobranca.Id = 0;
 
             ValidarCobranca(cobranca);
@@ -81,22 +82,23 @@ public class CobrancaService : ICobrancaService
         {
             var cobranca = await _cobrancaPersistence.GetByIdAsync(userId, id);
             if (cobranca is null) return null;
-            if (cobranca.Status != CobrancaStatusEnum.Lancado) throw new Exception("Não é permitido editar a cobrança.");
-
+            if (cobranca.Status != CobrancaStatusEnum.Lancado)
+            {
+                throw new ExceptionServiceBadRequestError("Não é permitido editar a cobrança.");
+            }
             cobranca.Id = cobranca.Id;
             _mapper.Map(model, cobranca);
 
             cobranca.UserId = userId;
             cobranca.Recibos = null;
+            cobranca.Transacionador = null;
 
             ValidarCobranca(cobranca);
 
             _cobrancaPersistence.Update<Cobranca>(cobranca);
             if (await _cobrancaPersistence.SaveChangesAsync())
             {
-                var cobrancaRetorno = await _cobrancaPersistence.GetByIdAsync(userId, id);
-
-                return _mapper.Map<CobrancaDto>(cobrancaRetorno);
+                return _mapper.Map<CobrancaDto>(cobranca);
             }
 
             return null;
