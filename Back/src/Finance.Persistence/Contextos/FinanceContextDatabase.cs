@@ -21,6 +21,7 @@ public class FinanceContextDatabase : IdentityDbContext<User, Role, int, Identit
     {
         AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
         AppContext.SetSwitch("Npgsql.DisableDateTimeInfinityConversions", true);
+        //Database.Migrate();
     }
 
     protected override void OnModelCreating(ModelBuilder builder)
