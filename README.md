@@ -50,7 +50,7 @@ dotnet tool install --global dotnet-ef
 <p>Após rodar o comando do docker compose e finalizar a execução, agora é preciso aplicar as migrations no container do PostgreSQL. Execute o seguinte comando: </p>
 
 ```
-dotnet ef database update -p Finance.API --connection 'User ID=postgres;Password=postgres;Host=localhost;Port=5432;Database=FinanceiroAPI'
+dotnet ef database update -p Finance.API --connection 'User ID=postgres;Password=postgres;Host=localhost;Port=5433;Database=FinanceiroAPI'
 ```
 
 ## Orientações extras caso o Docker não funcione
