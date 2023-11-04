@@ -19,17 +19,17 @@ services:
     environment:
       - ASPNETCORE_URLS=http://*:5000
       - ASPNETCORE_ENVIRONMENT=Development
-      - ConnectionStrings__PostgresConnect=User ID=postgres;Password=postgres;Host=app_db;Port=5432;Database=FinanceiroAPI
+      - ConnectionStrings__PostgresConnect=User ID=postgres;Password=postgres;Host=api_database;Port=5432;Database=FinanceiroAPI
     networks:
       - dev-back
     links:
-      - app_db
+      - api_database
     depends_on:
-      - "app_db"
+      - "api_database"
 
-  app_db:
+  api_database:
     image: postgres:latest
-    container_name: app_db
+    container_name: api_database
     environment:
       - POSTGRES_USER=postgres
       - POSTGRES_PASSWORD=postgres
