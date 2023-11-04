@@ -8,13 +8,51 @@
 
 ## Requisitos para rodar o projeto
 
+* Docker: [Link](https://www.docker.com/products/docker-desktop/)
+
+> [!WARNING]
+> Se por alguma razão o docker não suportar em seu computador ou algum problema ao executar o docker compose, basta instalar as ferramentas individualmente.
+
 * Dotnet SDK versão 7 ou superior: [Link](https://dotnet.microsoft.com/pt-br/download)
 * PostgresSQL versão 14 ou superior: [Link](https://www.postgresql.org/download/)
 
 <p>Caso queira somente executar, não precisa instalar nenhum editor de código simples ou IDE. Basta usar o terminal do seu sistema operacional para rodar e ver o funcionamento do projeto.</p>
 
-## Orientações Extras
-<p>Antes de rodar, verifique a senha de acesso ao SGBD PostgreSQL e coloque na configuração na parte do Back-end da aplicação, arquivo appsettings.json. Deve colocar o usuário e senha configurado no PostgreSQL no momento da instalação.</p>
+## Rodando aplicação.
+<p>Tendo o docker instalado, basta executar os seguintes comandos: </p>
+
+```
+docker-compose build --no-cache
+docker-compose up
+```
+<p>Será executando nos seguintes Hosts: </p>
+
+* Back-End: http://localhost:5000
+* Front-End: http://localhost:5003
+
+
+> [!WARNING]
+> Caso o docker compose não funcionar, deve ter instalado antes o Dotnet e PostgreSQL para executar de forma manual. Como essa aplicação foi fatiada em duas, terá que executar o back-end e front-end separadamente.
+
+## Rodando migration
+
+### Instalar a ferramenta EF 
+<p>Instale o Entity Framewrok Core Tools para pode executar as migrations pelo Dotnet CLI. Para instalar basta rodar o seguinte comando: </p>
+
+```
+dotnet tool install --global dotnet-ef
+```
+
+### Executando Migrations
+<p>Após rodar o comando do docker compose e finalizar a execução, agora é preciso aplicar as migrations no container do PostgreSQL. Execute o seguinte comando: </p>
+
+```
+dotnet ef database update -p Finance.API --connection 'User ID=postgres;Password=postgres;Host=api_database;Port=5432;Database=FinanceiroAPI'
+```
+
+## Orientações extras caso o Docker não funcione
+
+<p>Caso o docker não funcionar, será preciso rodar de forma completamente manual. Verifique a senha de acesso ao SGBD PostgreSQL e coloque na configuração na parte do Back-end da aplicação, arquivo appsettings.json. Deve colocar o usuário e senha configurado no PostgreSQL no momento da instalação.</p>
 
 ```json
 {
@@ -26,18 +64,9 @@
 }
 ```
 
-<p>Instale o Entity Framewrok Core Tools para pode executar as migrations pelo Dotnet CLI. Para instalar basta rodar o seguinte comando: </p>
-
-```
-dotnet tool install --global dotnet-ef
-```
-
-## Rodando aplicação.
-<p>Para rodar aplicação, deve ter instalado antes o Dotnet e PostgreSQL. Como essa aplicação foi fatiada em duas, terá que executar o back-end e front-end separadamente. Caso não for utilizar um Visual Studo Code, será preciso abrir dois terminais e navegar até a pasta de cada projeto para executar. O Visual Studo Code permite abrir dois terminais em uma única janela, caso for utilizar. Eu irei exemplificar com o CMD do Windows.</p>  
-
 
 ### Aplicando as Migrations no Banco de Dados.
-<p>Para aplicar as migrations, deve-se utilizar o seguinte comando: </p>
+<p>Para aplicar as migrations, deve-se utilizar o seguinte comando:</p>
 
 ```
 dotnet ef database update -p Finance.API
