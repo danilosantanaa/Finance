@@ -21,8 +21,11 @@
 ## Rodando aplicação.
 <p>Tendo o docker instalado, basta executar os seguintes comandos: </p>
 
-```
+```bash
 docker-compose build --no-cache
+```
+
+```bash
 docker-compose up
 ```
 <p>Será executando nos seguintes Hosts: </p>
