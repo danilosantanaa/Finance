@@ -14,7 +14,7 @@
 > Se por alguma razão o docker não suportar em seu computador ou algum problema ao executar o docker compose, basta instalar as ferramentas individualmente.
 
 * Dotnet SDK versão 7 ou superior: [Link](https://dotnet.microsoft.com/pt-br/download)
-* PostgresSQL versão 14 ou superior: [Link](https://www.postgresql.org/download/)
+* PostgreSQL versão 14 ou superior: [Link](https://www.postgresql.org/download/)
 
 <p>Caso queira somente executar, não precisa instalar nenhum editor de código simples ou IDE. Basta usar o terminal do seu sistema operacional para rodar e ver o funcionamento do projeto.</p>
 
@@ -28,7 +28,7 @@ docker-compose build --no-cache
 ```bash
 docker-compose up
 ```
-<p>Será executando nos seguintes Hosts: </p>
+<p>Será executado nos seguintes hosts: </p>
 
 * Back-End: http://localhost:5000
 * Front-End: http://localhost:5003
