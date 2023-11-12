@@ -62,6 +62,7 @@ div.btn-account {
 ::deep .controls-account {
     display: flex;
     flex-wrap: wrap;
+    justify-content: flex-start;
 } 
 
 ::deep .link {

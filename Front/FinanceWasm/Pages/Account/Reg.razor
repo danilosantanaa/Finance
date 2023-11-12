@@ -1,0 +1,65 @@
+﻿@layout LoginLayout
+
+@page "/register"
+
+@attribute [AllowAnonymous]
+
+@inject AccountService AccountService
+@inject SweetAlert SweetAlert
+@inject NavigationManager navigation
+
+<FormAccount>
+    <h2>Registro</h2>
+
+    <Form Model="Register" OnValidSubmit="CriarRegistro">
+        <DataAnnotationsValidator />
+
+        <InputTextCustom @bind-Value="Register.PrimeiroNome" Validation="() => Register.PrimeiroNome" type="text"
+            placeholder="Primeiro Nome" />
+
+        <InputTextCustom @bind-Value="Register.UltimoNome" Validation="() => Register.UltimoNome" type="text"
+            placeholder="Último Nome" />
+
+        <InputTextCustom @bind-Value="Register.UserName" Validation="() => Register.UserName" placeholder="Usuário" />
+
+        <InputTextCustom @bind-Value="Register.Password" Validation="() => Register.Password" type="password"
+            placeholder="Senha" />
+
+        <InputTextCustom @bind-Value="Register.ConfirmPassword" Validation="() => Register.ConfirmPassword"
+            type="password" placeholder="Confirmar Senha" />
+
+        <button class=" btn btn-primary">Criar <i class="fa-solid fa-right-to-bracket"></i></button>
+
+    </Form>
+
+    <div class="controls-account">
+        <a class="link" href="login">Login</a>
+    </div>
+</FormAccount>
+
+@code {
+    Register Register = new();
+    bool isLoaded = false;
+    async Task CriarRegistro()
+    {
+        try
+        {
+            isLoaded = true;
+
+            var result = await AccountService.Register(Register);
+
+            if (!result.IsSuccessStatusCode) throw new Exception(await result.Content.ReadAsStringAsync());
+
+            navigation.NavigateTo("/login");
+            await SweetAlert.ToastAsync(SweetAlertType.Success, "Conta criado com sucesso!");
+        }
+        catch (Exception ex)
+        {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, "Problema ao criar conta" + ex.Message);
+        }
+        finally
+        {
+            isLoaded = false;
+        }
+    }
+}

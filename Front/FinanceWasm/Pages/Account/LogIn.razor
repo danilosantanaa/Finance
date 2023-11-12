@@ -8,6 +8,7 @@
 @inject AuthProvider authProvider
 @inject ILocalStorageService localStorage
 @inject NavigationManager navigation
+@inject SweetAlert SweetAlert
 
 <FormAccount>
     <h2>Login</h2>
@@ -15,34 +16,30 @@
     <Form Model="Login" OnValidSubmit="DoLogin">
         <DataAnnotationsValidator />
 
-        <InputTextCustom @bind-Value="Login.UserName" Validation="() => Login.UserName" placeholder="Usuário" HiddenRequired="true"/>
-        
-        <InputTextCustom @bind-Value="Login.Password" Validation="() => Login.Password" type="password" placeholder="Senha" HiddenRequired="true" />
-        
+        <InputTextCustom @bind-Value="Login.UserName" Validation="() => Login.UserName" placeholder="Usuário"
+            HiddenRequired="true" />
+
+        <InputTextCustom @bind-Value="Login.Password" Validation="() => Login.Password" type="password"
+            placeholder="Senha" HiddenRequired="true" />
+
         <button class="btn btn-primary">Entrar <i class="fa-solid fa-right-to-bracket"></i></button>
-        
-        @if (!isLoaded)
-        {
-            <span style="color: red;">@response</span>
-        }
+
     </Form>
 
     <div class="controls-account">
-        <a class="link" href="#">Registrar</a>
-        <a class="link" href="#">Esqueceu a Senha?</a>
+        <a class="link" href="/register">Registrar</a>
     </div>
 </FormAccount>
 
 
 @code {
     Login Login = new();
-
-    string response;
     bool isLoaded = false;
 
     async Task DoLogin()
     {
-        try {
+        try
+        {
             isLoaded = true;
 
             var result = await AccountService.Login(Login);
@@ -55,17 +52,21 @@
 
             navigation.NavigateTo("/");
 
-        } catch (Exception ex) {
+        }
+        catch (Exception ex)
+        {
             Console.WriteLine(ex);
-            response = ex.Message;
-        } finally {
+            await SweetAlert.ToastAsync(SweetAlertType.Error, ex.Message);
+        }
+        finally
+        {
             isLoaded = false;
         }
     }
 
     class TokenResponse
     {
-        public string UserName { get; set; } 
+        public string UserName { get; set; }
         public string PrimeiroNome { get; set; }
         public string Token { get; set; }
     }
