@@ -6,6 +6,7 @@
 ## Requisitos para rodar o projeto
 
 * Docker: [Link](https://www.docker.com/products/docker-desktop/)
+* .NET 7 ou Superior: [Link](https://dotnet.microsoft.com/en-us/download)
 
 ## Rodando aplicação.
 <p>Tendo o docker instalado, basta executar os seguintes comandos: </p>
@@ -32,7 +33,7 @@ dotnet tool install --global dotnet-ef
 ```
 
 ### Executando Migrations
-<p>Após rodar o comando do docker compose e finalizar a execução, agora é preciso aplicar as migrations no container do PostgreSQL. Execute o seguinte comando: </p>
+<p>Após rodar o comando do docker compose e finalizar a execução, agora é preciso aplicar as migrations no container do PostgreSQL. Navegue na pasta Back/src e execute o seguinte comando: </p>
 
 ```
 dotnet ef database update -p Finance.API --connection 'User ID=postgres;Password=postgres;Host=localhost;Port=5433;Database=FinanceiroAPI'
