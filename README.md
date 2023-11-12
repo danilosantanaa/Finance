@@ -6,6 +6,7 @@
 ## Requisitos para rodar o projeto
 
 * Docker: [Link](https://www.docker.com/products/docker-desktop/)
+* .NET 7 Core ou Superior: [Link](https://dotnet.microsoft.com/en-us/download)
 
 ## Rodando aplicação.
 <p>Tendo o docker instalado, basta executar os seguintes comandos: </p>
