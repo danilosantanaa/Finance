@@ -1,4 +1,4 @@
-version: "3"
+version: "2"
 
 networks:
   dev-back:
@@ -7,7 +7,7 @@ networks:
     driver: bridge
 
 volumes:
-  app_data:
+  app_database:
 
 services:
   api:
@@ -41,7 +41,7 @@ services:
     networks:
       - dev-back
     volumes:
-      - app_data:/var/lib/postgresql/data
+      - app_database:/var/lib/postgresql/data
     healthcheck:
       test: /healthchecks/postgres.sh
       interval: 5s
